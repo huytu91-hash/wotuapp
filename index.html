@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>WOTU – Phần mềm báo giá tự động</title>
+<meta name="description" content="Báo giá thiết kế, xây dựng chìa khóa trao tay và nội thất WOTU."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --red:#9b1c1c; --red2:#c41e1e; --ink:#0c0c0c; --paper:#f3efe8; --line:rgba(0,0,0,.08);
+}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Be Vietnam Pro",system-ui,sans-serif;background:var(--paper);color:var(--ink);min-height:100vh}
+.shell{max-width:880px;margin:0 auto;padding:28px 18px 110px}
+.logo{display:flex;align-items:center;gap:12px}
+.mark{width:42px;height:42px;border-radius:12px;background:linear-gradient(145deg,#111,#9b1c1c);color:#fff;display:grid;place-items:center;font-weight:800;letter-spacing:.04em}
+.logo small{display:block;letter-spacing:.28em;text-transform:uppercase;font-size:10px;color:#6b645c;margin-top:2px}
+h1{font-size:clamp(1.5rem,4vw,2.1rem);line-height:1.2;margin:18px 0 8px;letter-spacing:-.03em}
+.lead{color:#5c564e;line-height:1.6}
+.card{background:#fff;border:1px solid var(--line);border-radius:22px;padding:20px;margin:14px 0;box-shadow:0 20px 50px rgba(20,10,0,.05)}
+.card.on{outline:2px solid var(--red);outline-offset:0}
+label{display:block;font-size:13px;font-weight:500;margin:12px 0 0;color:#3d3832}
+input,select,textarea{width:100%;margin-top:7px;padding:13px 14px;border:1px solid #e4ddd4;border-radius:14px;font:inherit;background:#faf8f5}
+textarea{min-height:110px;resize:vertical}
+.btn{width:100%;border:0;border-radius:999px;padding:14px 18px;font:inherit;font-weight:700;cursor:pointer;margin-top:12px}
+.btn-p{background:linear-gradient(180deg,var(--red2),var(--red));color:#fff}
+.btn-g{background:#fff;border:1px solid #ddd3c8;color:#111}
+.err{color:var(--red);font-size:12px;margin-top:8px}
+.grid{display:grid;gap:12px}
+@media(min-width:720px){.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr 1fr}}
+.chip{border:1px solid #e4ddd4;background:#fff;border-radius:999px;padding:10px 12px;font-size:13px;cursor:pointer}
+.chip.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.price{background:#111;color:#fff;border-radius:22px;padding:22px;margin-top:14px}
+.price .r{display:flex;justify-content:space-between;color:#c9c2b8;font-size:14px;margin:8px 0}
+.price .t{display:flex;justify-content:space-between;align-items:end;border-top:1px solid #2a2a2a;padding-top:14px;margin-top:10px}
+.price .t b{font-size:1.55rem;letter-spacing:-.03em}
+.muted{color:#6b645c;font-size:13px;line-height:1.55}
+.nav{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.92);backdrop-filter:blur(14px);border-top:1px solid var(--line);display:flex}
+.nav button{flex:1;border:0;background:none;padding:12px 0 16px;font-size:11px;color:#8a837a}
+.nav button.on{color:var(--red);font-weight:700}
+.hidden{display:none}
+.row{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.qty{display:flex;align-items:center;gap:8px}
+.qty b{min-width:72px;text-align:center}
+ol{margin:8px 0 0;padding-left:18px;color:#5c564e;font-size:14px}
+.tag{display:inline-block;font-size:10px;letter-spacing:.16em;text-transform:uppercase;color:var(--red);font-weight:700}
+</style>
+</head>
+<body>
+<div class="shell" id="app"></div>
+<nav class="nav hidden" id="nav">
+  <button data-go="home">Trang chủ</button>
+  <button data-go="design">Thiết kế</button>
+  <button data-go="build">Xây</button>
+  <button data-go="interior">Nội thất</button>
+  <button data-go="history">Hồ sơ</button>
+</nav>
+<script>
+const VND=n=>Math.round(n).toLocaleString("vi-VN")+"đ";
+const DESIGN=[
+  {id:"tiet-kiem",name:"Tiết kiệm",price:79000,items:["2D công năng","3D nội thất"]},
+  {id:"co-ban",name:"Cơ bản",price:119000,items:["Toàn bộ Gói 1","2D chi tiết kích thước","Chỉ định vật liệu nội thất","2D ổ cắm điện nước"]},
+  {id:"hoan-thien",name:"Hoàn thiện",price:179000,items:["Toàn bộ Gói 2","Kết cấu xây dựng","Hồ sơ hoàn chỉnh","3D mặt đứng / mặt tiền"]}
+];
+const BUILD_PKG=[
+  {id:"co-ban",name:"Cơ bản",price:6000000},
+  {id:"trung-binh",name:"Trung bình",price:7000000},
+  {id:"cao-cap",name:"Cao cấp",price:8000000}
+];
+const PRODUCTS=[
+  {id:"tb",name:"Tủ bếp dưới MDF chống ẩm Melamine",unit:"md",price:3800000,install:150000},
+  {id:"tt",name:"Tủ bếp trên MDF chống ẩm Melamine",unit:"md",price:2800000,install:120000},
+  {id:"da",name:"Mặt đá bếp",unit:"md",price:1200000,install:80000},
+  {id:"kinh",name:"Kính ốp bếp 8mm",unit:"md",price:800000,install:50000},
+  {id:"led",name:"LED tủ bếp",unit:"bộ",price:350000,install:0},
+  {id:"gv",name:"Kệ gia vị",unit:"cái",price:450000,install:0},
+  {id:"xn",name:"Kệ xoong nồi",unit:"cái",price:650000,install:0},
+  {id:"ao",name:"Tủ áo MDF",unit:"md",price:2500000,install:100000},
+  {id:"giuong",name:"Giường MDF",unit:"cái",price:4500000,install:200000}
+];
+const S={
+  page:localStorage.wotu_c?"home":"welcome",
+  c:JSON.parse(localStorage.wotu_c||"null"),
+  quotes:JSON.parse(localStorage.wotu_q||"[]"),
+  dPkg:"co-ban",dArea:80,dDone:false,
+  house:"nha-ong",road:"o-to",w:4,l:10,land:40,bal:1,
+  floors:[{k:"btct"},{k:"btct"}],bPkg:"trung-binh",bDone:false,confirm:false,
+  req:"Bếp 3m5 bằng MDF chống ẩm phủ Melamine",items:[]
+};
+const money=(sub,disc=0,inst=0)=>{const base=Math.max(0,sub-disc);const vat=Math.round(base*.1);return{sub,disc,inst,vat,total:base+vat+inst}};
+const priceHTML=b=>`<div class="price">
+  <div class="r"><span>Giá chưa VAT</span><span>${VND(b.sub)}</span></div>
+  ${b.disc?`<div class="r"><span>Chiết khấu</span><span>- ${VND(b.disc)}</span></div>`:""}
+  ${b.inst?`<div class="r"><span>Phí lắp đặt</span><span>${VND(b.inst)}</span></div>`:""}
+  <div class="r"><span>VAT 10%</span><span>${VND(b.vat)}</span></div>
+  <div class="t"><span>Tổng thanh toán</span><b>${VND(b.total)}</b></div>
+</div>`;
+function seq(){const n=+(localStorage.wotu_n||0)+1;localStorage.wotu_n=n;return"WOTU-Q-"+String(n).padStart(6,"0")}
+function saveQ(quote){if(!S.c)return go("welcome");const row={code:seq(),c:S.c,quote,at:new Date().toISOString()};S.quotes.unshift(row);localStorage.wotu_q=JSON.stringify(S.quotes.slice(0,60));go("done",row)}
+function go(p,extra){S.page=p;S.extra=extra;render()}
+function logo(){return`<div class="logo"><div class="mark">W</div><div><div style="font-weight:800;letter-spacing:.2em">WOTU</div><small>Báo giá tự động</small></div></div>`}
+
+function welcome(){return`
+${logo()}
+<h1>Phần mềm báo giá tự động</h1>
+<p class="lead">Xin chào quý khách đã đến với phần mềm báo giá tự động của WOTU.</p>
+<div class="card">
+  <label>Họ và tên *<input id="fn" value="${S.c?.fullName||""}"></label>
+  <label>Số điện thoại *<input id="ph" inputmode="tel" value="${S.c?.phone||""}"></label>
+  <label>Địa chỉ *<input id="ad" value="${S.c?.address||""}"></label>
+  <label style="display:flex;gap:10px;align-items:flex-start;font-weight:400">
+    <input type="checkbox" id="ok" ${S.c?.consent?"checked":""} style="width:auto;margin-top:3px">
+    Đồng ý để WOTU lưu thông tin liên hệ nhằm lập báo giá sơ bộ và tư vấn.
+  </label>
+  <div class="err" id="er"></div>
+  <button class="btn btn-p" onclick="submitC()">Tiếp tục với thông tin trên</button>
+  <button class="btn btn-g" onclick="alert('Đăng nhập Google sẽ bật khi kết nối tài khoản (bản production).')">Đăng nhập bằng Google</button>
+</div>`}
+function submitC(){
+  const fullName=fn.value.trim(),phone=ph.value.replace(/[\s.\-]/g,""),address=ad.value.trim(),consent=ok.checked,e=[];
+  if(!fullName)e.push("Nhập họ và tên.");
+  if(!/^(0|\+84)(3|5|7|8|9)\d{8}$/.test(phone))e.push("Số điện thoại Việt Nam không hợp lệ.");
+  if(!address)e.push("Nhập địa chỉ.");
+  if(!consent)e.push("Cần đồng ý xử lý dữ liệu.");
+  if(e.length){er.textContent=e.join(" ");return}
+  S.c={fullName,phone,address,consent};localStorage.wotu_c=JSON.stringify(S.c);go("home");
+}
+
+function home(){return`
+${logo()}
+<p class="lead" style="margin-top:22px">Xin chào, <b>${S.c.fullName}</b>. Chọn hạng mục cần báo giá.</p>
+<div class="grid g3">
+  <div class="card"><span class="tag">01</span><h3>Chi phí thiết kế</h3><p class="muted">Ba gói thiết kế nhà, VAT 10%.</p><button class="btn btn-p" onclick="go('design')">Bắt đầu</button></div>
+  <div class="card"><span class="tag">02</span><h3>Xây dựng trọn gói</h3><p class="muted">Chìa khóa trao tay theo từng sàn.</p><button class="btn btn-p" onclick="go('build')">Bắt đầu</button></div>
+  <div class="card"><span class="tag">03</span><h3>Nội thất</h3><p class="muted">Bóc tách hạng mục từ nhu cầu.</p><button class="btn btn-p" onclick="go('interior')">Bắt đầu</button></div>
+</div>`}
+
+function design(){
+  const pkg=DESIGN.find(p=>p.id===S.dPkg);const m=money(Math.max(0,S.dArea)*pkg.price);
+  return`${logo()}<h1>Chi phí thiết kế</h1>
+  ${DESIGN.map(p=>`<div class="card ${S.dPkg===p.id?"on":""}" onclick="S.dPkg='${p.id}';render()">
+    <div class="row"><b>Gói ${p.name}</b><span style="color:var(--red);font-weight:800">${VND(p.price)}/m²</span></div>
+    <ul class="muted">${p.items.map(i=>`<li>${i}</li>`).join("")}</ul>
+  </div>`).join("")}
+  <label>Tổng diện tích (m²)<input type="number" min="1" value="${S.dArea}" oninput="S.dArea=+this.value"></label>
+  <button class="btn btn-p" onclick="S.dDone=true;render()">Tính toán</button>
+  ${S.dDone&&S.dArea>0?priceHTML(m)+`<p class="muted">Đơn giá cơ bản là giá chưa VAT.</p>
+  <div class="card"><b>Quy trình thiết kế WOTU</b>
+  <ol><li>Tiếp nhận thông tin & ký hợp đồng. Thu tiền tạm ứng theo thỏa thuận.</li>
+  <li>Khảo sát hiện trạng nếu cần.</li><li>Triển khai thiết kế theo gói khách chọn.</li>
+  <li>Gửi bản thiết kế cho khách duyệt.</li>
+  <li>Chỉnh sửa theo góp ý. Tối đa 3 lần. Không tính sai sót từ phía đơn vị thiết kế.</li>
+  <li>Bàn giao hồ sơ hoàn chỉnh. File mềm + bản in nếu có.</li></ol></div>
+  <button class="btn btn-p" onclick='saveQ({type:"Thiết kế",detail:"Gói "+pkg.name+" · "+S.dArea+"m²",money:${JSON.stringify(m)}})'>Lưu báo giá</button>
+  <button class="btn btn-g" onclick="alert('Đã ghi nhận yêu cầu tư vấn.')">Gửi yêu cầu tư vấn</button>`:""}`;
+}
+
+function calcBuild(){
+  const base=S.land+S.w*Math.max(0,S.bal);const lines=[];
+  S.floors.forEach((f,i)=>{
+    const last=i===S.floors.length-1;let coeff=1,label=`Sàn ${i+1} — BTCT`;
+    if(f.k==="ton"){coeff=.3;label=`Sàn ${i+1} — lợp tôn`}
+    else if(last){coeff=.5;label=`Sàn ${i+1} — mái BTCT`}
+    lines.push({label,coeff,bill:base*coeff});
+  });
+  const bill=lines.reduce((s,x)=>s+x.bill,0);
+  const pkg=BUILD_PKG.find(p=>p.id===S.bPkg);
+  return{lines,bill,pkg,money:money(bill*pkg.price)};
+}
+function build(){
+  const mis=Math.abs(S.w*S.l-S.land)>0.05;const q=calcBuild();
+  return`${logo()}<h1>Xây dựng trọn gói</h1><p class="lead">Chìa khóa trao tay</p>
+  <div class="card"><b>Loại nhà</b><div class="grid g2" style="margin-top:10px">
+    ${[["nha-ong","Nhà ống"],["hai-mat-tien","Nhà 2 mặt tiền"],["villa","Villa / biệt thự"],["mai-thai","Nhà mái thái"]].map(([id,l])=>`<button class="chip ${S.house===id?"on":""}" onclick="S.house='${id}';render()">${l}</button>`).join("")}
+  </div></div>
+  <div class="card"><b>Đường trước nhà</b><div class="grid g3" style="margin-top:10px">
+    ${[["o-to","Đường ô tô"],["hem-lon","Hẻm lớn"],["hem-nho","Hẻm nhỏ"]].map(([id,l])=>`<button class="chip ${S.road===id?"on":""}" onclick="S.road='${id}';render()">${l}</button>`).join("")}
+  </div></div>
+  <div class="card grid g2">
+    <label>Chiều ngang (m)<input type="number" value="${S.w}" oninput="S.w=+this.value;S.confirm=false"></label>
+    <label>Chiều dài (m)<input type="number" value="${S.l}" oninput="S.l=+this.value;S.confirm=false"></label>
+    <label>Diện tích đất (m²)<input type="number" value="${S.land}" oninput="S.land=+this.value;S.confirm=false"></label>
+    <label>Ban công nhô (m)<input type="number" value="${S.bal}" oninput="S.bal=+this.value"></label>
+  </div>
+  <p class="muted">Ngang × dài = ${(S.w*S.l).toFixed(2)} m²</p>
+  ${mis?`<div class="card" style="background:#fff6f0"><p class="err" style="margin:0">Diện tích đất không khớp ngang × dài.</p>
+    <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" ${S.confirm?"checked":""} style="width:auto" onchange="S.confirm=this.checked;render()"> Tôi xác nhận dùng diện tích đất đã nhập</label></div>`:""}
+  <div class="card">
+    <label>Số sàn / tầng<input type="number" min="1" max="12" value="${S.floors.length}" oninput="const n=Math.max(1,+this.value||1);S.floors=Array.from({length:n},(_,i)=>S.floors[i]||{k:'btct'});render()"></label>
+    ${S.floors.map((f,i)=>`<label>Sàn ${i+1}<select onchange="S.floors[${i}].k=this.value;render()">
+      <option value="btct" ${f.k==="btct"?"selected":""}>Sàn / mái BTCT</option>
+      <option value="ton" ${f.k==="ton"?"selected":""}>Lợp tôn</option>
+    </select></label>`).join("")}
+    <p class="muted">Hệ số: sàn thường 100% · mái BTCT 50% · tôn 30% · ban công cộng vào diện tích sàn.</p>
+  </div>
+  ${BUILD_PKG.map(p=>`<div class="card ${S.bPkg===p.id?"on":""}" onclick="S.bPkg='${p.id}';render()"><div class="row"><b>${p.name}</b><span style="color:var(--red);font-weight:800">${VND(p.price)}/m²</span></div></div>`).join("")}
+  <div class="card muted">Bao gồm: xây thô, điện nước âm, thiết bị vệ sinh, cửa nhôm kính, gạch ốp lát, chống thấm. Tặng tủ bếp khi ký hợp đồng chìa khóa trao tay. Chưa gồm nội thất rời / trang trí.</div>
+  <button class="btn btn-p" ${mis&&!S.confirm?"disabled":""} onclick="S.bDone=true;render()">Tính toán</button>
+  ${S.bDone?`<div class="card">${q.lines.map(l=>`<div class="row muted"><span>${l.label} × ${l.coeff}</span><span>${l.bill.toFixed(1)} m²</span></div>`).join("")}
+    <div class="row" style="margin-top:10px"><b>Tổng diện tích tính giá</b><b>${q.bill.toFixed(1)} m²</b></div></div>
+    ${priceHTML(q.money)}
+    <button class="btn btn-p" onclick='saveQ({type:"Xây dựng",detail:q.pkg.name+" · "+q.bill.toFixed(1)+"m²",money:${JSON.stringify(q.money)}})'>Lưu báo giá</button>
+    <button class="btn btn-g" onclick="alert('Đã ghi nhận yêu cầu tư vấn.')">Gửi yêu cầu tư vấn</button>`:""}`;
+}
+
+function analyze(){
+  const raw=(S.req.match(/(\d+[.,]?\d*)\s*m/)||[])[1];
+  const md=raw?+raw.replace(",","."):3.5;
+  const t=S.req.toLowerCase();
+  const ids=t.includes("bếp")?["tb","tt","da","kinh","led","gv","xn"]: (t.includes("ngủ")||t.includes("giường")||t.includes("tủ áo"))?["ao","giuong"]:["tb"];
+  S.items=ids.map(id=>{const p=PRODUCTS.find(x=>x.id===id);return{...p,qty:p.unit==="md"?md:1}});
+  render();
+}
+function interior(){
+  const sub=S.items.reduce((s,i)=>s+i.qty*i.price,0);
+  const inst=S.items.reduce((s,i)=>s+i.qty*(i.install||0),0);
+  const m=money(sub,0,inst);
+  return`${logo()}<h1>Nội thất</h1>
+  <textarea oninput="S.req=this.value">${S.req}</textarea>
+  <p class="muted">Phân tích thủ công / AI chưa cấu hình. Giá lấy từ catalog — không tự bịa giá.</p>
+  <button class="btn btn-p" onclick="analyze()">Phân tích nhu cầu</button>
+  ${S.items.length?`<div class="card">${S.items.map((i,idx)=>`<div style="padding:10px 0;border-bottom:1px solid var(--line)">
+    <div class="row"><b>${i.name}</b><button class="chip" onclick="S.items.splice(${idx},1);render()">Xóa</button></div>
+    <div class="row" style="margin-top:8px">
+      <div class="qty">
+        <button class="chip" onclick="S.items[${idx}].qty=Math.max(0,+(S.items[${idx}].qty-0.5).toFixed(1));render()">−</button>
+        <b>${i.qty} ${i.unit}</b>
+        <button class="chip" onclick="S.items[${idx}].qty=+(S.items[${idx}].qty+0.5).toFixed(1);render()">+</button>
+      </div>
+      <span>${VND(i.qty*i.price)}</span>
+    </div></div>`).join("")}
+    <select onchange="if(this.value){const p=PRODUCTS.find(x=>x.id===this.value);S.items.push({...p,qty:1});this.value='';render()}">
+      <option value="">+ Thêm hạng mục</option>
+      ${PRODUCTS.map(p=>`<option value="${p.id}">${p.name} — ${VND(p.price)}/${p.unit}</option>`).join("")}
+    </select></div>
+    ${priceHTML(m)}
+    <button class="btn btn-p" onclick='saveQ({type:"Nội thất",detail:S.req,money:${JSON.stringify(m)}})'>Lưu báo giá</button>`:""}`;
+}
+
+function history(){
+  if(!S.quotes.length)return`${logo()}<h1>Hồ sơ báo giá</h1><p class="lead">Chưa có báo giá.</p>`;
+  return`${logo()}<h1>Hồ sơ báo giá</h1>`+S.quotes.map(q=>`<div class="card"><div class="row"><b>${q.code}</b><span style="color:var(--red);font-weight:800">${VND(q.quote.money.total)}</span></div><p class="muted">${q.quote.type} · ${q.quote.detail||""}<br>${q.c.fullName} · ${q.c.phone}<br>${new Date(q.at).toLocaleString("vi-VN")}</p></div>`).join("");
+}
+function done(){
+  const q=S.extra;if(!q)return history();
+  return`${logo()}<p class="tag">Báo giá sơ bộ WOTU</p><h1>${q.code}</h1>
+  <div class="card"><b>${q.c.fullName}</b><p class="muted">${q.c.phone}<br>${q.c.address}</p></div>
+  <div class="card"><b>${q.quote.type}</b><p class="muted">${q.quote.detail||""}</p></div>
+  ${priceHTML(q.quote.money)}
+  <button class="btn btn-p" onclick="go('history')">Về hồ sơ</button>
+  <button class="btn btn-g" onclick="go('home')">Làm lại</button>`;
+}
+
+function render(){
+  const map={welcome,home,design,build,interior,history,done};
+  app.innerHTML=(map[S.page]||home)();
+  nav.className=S.page==="welcome"?"nav hidden":"nav";
+  [...nav.querySelectorAll("button")].forEach(b=>b.className=b.dataset.go===S.page?"on":"");
+}
+nav.onclick=e=>{if(e.target.dataset.go)go(e.target.dataset.go)};
+render();
+</script>
+</body>
+</html>
