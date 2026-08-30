@@ -2,458 +2,320 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>WOTU — Báo giá tự động</title>
-<meta name="description" content="Báo giá thiết kế, xây dựng và nội thất WOTU. Nội thất cho tổ ấm Việt."/>
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+<title>WOTU — Báo giá thiết kế & nội thất</title>
+<meta name="theme-color" content="#111111"/>
 <link rel="preconnect" href="https://fonts.googleapis.com"/>
 <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
 <style>
 :root{
-  --red:#9b1c1c; --ink:#141414; --muted:#6b645c; --paper:#f4f0ea; --line:#e7e0d6; --card:#fff;
+ --ink:#121212; --red:#8f1d1d; --muted:#6f675f; --line:#e6dfd6;
+ --paper:#f3efe8; --card:#fffcf8;
 }
 *{box-sizing:border-box}
-body{margin:0;font-family:"Be Vietnam Pro",system-ui,sans-serif;background:var(--paper);color:var(--ink);min-height:100vh}
+html{scroll-behavior:smooth}
+body{
+ margin:0;color:var(--ink);
+ font-family:"Be Vietnam Pro",system-ui,sans-serif;
+ background:
+ radial-gradient(920px 480px at 0% -8%, rgba(143,29,29,.10), transparent 50%),
+ radial-gradient(700px 400px at 100% 0%, rgba(20,20,20,.05), transparent 46%),
+ var(--paper);
+ min-height:100vh;
+}
 a{color:var(--red);text-decoration:none}
-.shell{max-width:860px;margin:0 auto;padding:22px 16px 120px}
-.top{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:18px}
-.brand{display:flex;align-items:center;gap:12px}
-.mark{width:48px;height:48px;border-radius:14px;background:#111;color:#fff;display:grid;place-items:center;font-weight:800;letter-spacing:.06em}
-.brand b{letter-spacing:.22em;font-size:20px}
-.brand b span{color:var(--red)}
-.brand small{display:block;color:var(--muted);font-size:11px;margin-top:2px}
-.links{display:flex;gap:8px;flex-wrap:wrap;justify-content:flex-end}
-.links a,.chip,.btn{border-radius:999px;font:inherit}
-.links a{border:1px solid var(--line);background:#fff;padding:8px 12px;font-size:12px;color:#111}
-h1{font-size:clamp(1.45rem,4vw,2rem);letter-spacing:-.03em;line-height:1.2;margin:10px 0 8px}
-.lead{color:var(--muted);line-height:1.6;margin:0 0 16px}
-.card{background:var(--card);border:1px solid var(--line);border-radius:20px;padding:18px;margin:12px 0}
-.card.on{border-color:#111}
+.shell{max-width:880px;margin:0 auto;padding:22px 18px 112px;animation:rise .5s ease both}
+@keyframes rise{from{opacity:0;transform:translateY(14px)}to{opacity:1;transform:none}}
+.top{display:flex;justify-content:space-between;gap:12px;align-items:center;margin-bottom:22px}
+.brand{display:flex;gap:12px;align-items:center}
+.mark{
+ width:50px;height:50px;border-radius:16px;background:linear-gradient(160deg,#1a1a1a,#8f1d1d 78%);
+ color:#fff;display:grid;place-items:center;font-weight:800;letter-spacing:.06em;
+ box-shadow:0 14px 28px rgba(143,29,29,.28);
+}
+.brand b{letter-spacing:.28em;font-size:21px}
+.brand b i{color:var(--red);font-style:normal}
+.brand small{display:block;margin-top:3px;color:var(--muted);font-size:11px;letter-spacing:.04em}
+.pill{display:inline-flex;align-items:center;border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 12px;font-size:12px;color:#111;margin-left:6px}
+h1{font-size:clamp(1.55rem,4.2vw,2.15rem);letter-spacing:-.04em;line-height:1.15;margin:6px 0 10px}
+.lead,.note{color:var(--muted);line-height:1.65}
+.note{font-size:12.5px}
+.card{
+ background:var(--card);border:1px solid rgba(0,0,0,.06);border-radius:22px;
+ padding:18px;margin:14px 0;box-shadow:0 18px 50px rgba(28,16,8,.06);
+ animation:rise .45s ease both;
+}
+.hero{display:grid;gap:12px}
+@media(min-width:720px){.hero{grid-template-columns:1fr 1fr}}
+.hero .card{min-height:168px;display:flex;flex-direction:column}
+.hero .card b{font-size:1.15rem}
+.kicker{font-size:11px;letter-spacing:.18em;text-transform:uppercase;color:var(--red);font-weight:700}
 label{display:block;font-size:13px;font-weight:500;margin:12px 0 0}
-input,select,textarea{width:100%;margin-top:6px;padding:12px 13px;border:1px solid var(--line);border-radius:12px;font:inherit;background:#faf8f4}
-.btn{width:100%;border:0;padding:14px 16px;font-weight:700;cursor:pointer;margin-top:10px}
-.btn-p{background:var(--ink);color:#fff}
+input,select,textarea{
+ width:100%;margin-top:7px;padding:13px 14px;border:1px solid var(--line);
+ border-radius:14px;font:inherit;background:#fff;
+}
+textarea{min-height:110px;resize:vertical}
+input:focus,select:focus,textarea:focus{outline:2px solid #171717;outline-offset:1px}
+.btn{
+ width:100%;border:0;border-radius:999px;padding:14px 16px;font:inherit;font-weight:700;
+ cursor:pointer;margin-top:11px;transition:transform .15s,box-shadow .2s;
+}
+.btn-p{background:#141414;color:#fff;box-shadow:0 10px 22px rgba(0,0,0,.18)}
 .btn-g{background:#fff;border:1px solid var(--line)}
-.btn[disabled]{opacity:.4}
+.btn:active{transform:scale(.985)}
 .err{color:var(--red);font-size:12px;margin-top:8px}
-.note{color:var(--muted);font-size:12px;line-height:1.55;margin:8px 0 0}
+.ok{color:#1c7a40;font-size:13px}
+.sheet{padding:22px}
+.line{display:flex;justify-content:space-between;gap:14px;padding:13px 0;border-bottom:1px solid var(--line)}
 .price{background:#111;color:#fff;border-radius:20px;padding:20px;margin-top:14px}
-.price .r{display:flex;justify-content:space-between;color:#c9c2b8;font-size:14px;margin:7px 0}
-.price .t{display:flex;justify-content:space-between;align-items:end;border-top:1px solid #2c2c2c;padding-top:12px;margin-top:8px}
-.price .t b{font-size:1.45rem}
-.grid{display:grid;gap:10px}
-@media(min-width:700px){.g2{grid-template-columns:1fr 1fr}.g3{grid-template-columns:1fr 1fr 1fr}}
-.nav{position:fixed;left:0;right:0;bottom:0;background:rgba(255,255,255,.94);border-top:1px solid var(--line);display:flex}
-.nav button{flex:1;border:0;background:none;padding:12px 0 16px;font-size:11px;color:#8a837a}
+.price .r{display:flex;justify-content:space-between;color:#c8c0b6;margin:7px 0;font-size:14px}
+.price .t{display:flex;justify-content:space-between;align-items:end;border-top:1px solid #2b2b2b;padding-top:12px;margin-top:8px}
+.price .t b{font-size:1.5rem;letter-spacing:-.03em}
+.wait{display:flex;align-items:center;gap:10px;color:var(--muted);font-size:13px}
+.dot{width:8px;height:8px;border-radius:50%;background:var(--red);animation:pulse 1s infinite}
+@keyframes pulse{50%{opacity:.35;transform:scale(.8)}}
+.nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:rgba(255,252,248,.9);backdrop-filter:blur(16px);border-top:1px solid var(--line)}
+.nav button{flex:1;border:0;background:0;padding:13px 0 18px;font-size:11px;color:#8a837a}
 .nav button.on{color:var(--red);font-weight:700}
 .hidden{display:none}
-.row{display:flex;justify-content:space-between;gap:8px;align-items:center}
-.strike{color:#9a948c;text-decoration:line-through;font-size:12px}
-.ok{color:#1f7a3a;font-size:13px}
+@media print{
+ body{background:#fff}
+ .nav,.no-print,.links{display:none!important}
+ .shell{padding:0;animation:none}
+ .card{box-shadow:none;border-color:#ddd}
+}
 </style>
 </head>
 <body>
 <div class="shell" id="app"></div>
 <nav class="nav hidden" id="nav">
-  <button data-go="home">Trang chủ</button>
-  <button data-go="design">Thiết kế</button>
-  <button data-go="build">Xây</button>
-  <button data-go="interior">Nội thất</button>
-  <button data-go="history">Hồ sơ</button>
+ <button data-go="home">Trang chủ</button>
+ <button data-go="design">Thiết kế</button>
+ <button data-go="interior">Nội thất</button>
+ <button data-go="history">Hồ sơ</button>
 </nav>
 <script>
-const VAT=0.08, MAIL="Huytu91@gmail.com", PHONE="0944437238";
+const VAT=.08, MAIL="Huytu91@gmail.com", PHONE="0944437238";
 const WEB="https://wotu.vn", FB="https://www.facebook.com/wotuani", ZALO="https://zalo.me/0944437238";
 const VND=n=>Math.round(n).toLocaleString("vi-VN")+"đ";
-const money=sub=>{const vat=Math.round(Math.max(0,sub)*VAT);return{sub:Math.max(0,sub),vat,total:Math.max(0,sub)+vat}};
+const money=s=>{s=Math.max(0,Math.round(s));const v=Math.round(s*VAT);return{sub:s,vat:v,total:s+v}};
 const S={
-  page:localStorage.wotu_c?"home":"welcome",
-  c:JSON.parse(localStorage.wotu_c||"null"),
-  quotes:JSON.parse(localStorage.wotu_q||"[]"),
-  extra:null, msg:"",
-  dPkg:"co-ban", dArea:80, dDone:false,
-  house:"nha-ong", road:"o-to", w:4, l:10, land:40, bal:1,
-  floors:[{k:"btct"},{k:"btct"}], bPkg:"trung-binh", confirm:false, bDone:false,
-  open:{}, led:{},
-  kh:{ke:0, op:"", giay:0, rem:0},
-  bep:{duoi:"", tren:"", kich:"", canh:"melamine", mdD:0, mdT:0, mdK:0, da:"", op:"", lanh:"", lanhCanh:"melamine", bon:false},
-  an:{tu:"", ban:"", m2:0},
-  ngu:["master","n2","n3"].reduce((o,id)=>(o[id]={tu:"", canh:"", m2:0, giuong:"", hoc:0, tab:"", td:"", tdmd:0, rem:0},o),{}),
-  tho:{vach:"", m2:0},
-  acc:{}
+ page:localStorage.wotu_c?"home":"welcome",
+ c:JSON.parse(localStorage.wotu_c||"null"),
+ quotes:JSON.parse(localStorage.wotu_q||"[]"),
+ extra:null,msg:"",busy:false,
+ dText:"Căn hộ 65m2 gói cơ bản", dAsk:null, dQuote:null,
+ iText:"Làm bếp 3m, tủ đồ 1m9", iAsk:null, iDraft:null, iQuote:null
 };
-const DESIGN=[
-  {id:"tiet-kiem",name:"Tiết kiệm",price:79000},
-  {id:"co-ban",name:"Cơ bản",price:119000},
-  {id:"hoan-thien",name:"Hoàn thiện",price:179000}
-];
-const BUILD={
-  normal:{ "co-ban":6e6,"trung-binh":7e6,"cao-cap":8e6 },
-  villa:{ "co-ban":12e6,"trung-binh":16e6,"cao-cap":20e6 }
+const PKG={
+ "tiet-kiem":{name:"Tiết kiệm",p:79000,inc:["Mặt bằng công năng 2D","Phối cảnh 3D nội thất các không gian chính"]},
+ "co-ban":{name:"Cơ bản",p:119000,inc:["Toàn bộ gói Tiết kiệm","2D chi tiết kích thước","Chỉ định vật liệu nội thất","2D ổ cắm điện nước"]},
+ "hoan-thien":{name:"Hoàn thiện",p:179000,inc:["Toàn bộ gói Cơ bản","Hồ sơ kết cấu","3D mặt đứng / mặt tiền","Hồ sơ bàn giao hoàn chỉnh"]}
 };
-const BEP_BOX={mdf:{d:2100000,t:2000000,k:1800000},plywood:{d:2700000,t:2500000,k:2300000},nhua:{d:2900000,t:2700000,k:2500000}};
-const DA={su:1900000,kimsa:1350000,lamar:1800000};
-const OPB={su:1900000,kimsa:1350000,lamar:1800000,k8:850000,k6:780000};
-const GARIS=[
-  {id:"g-xoong",z:"bep",name:"Giá xoong / bát tủ dưới",goc:6090000},
-  {id:"g-gia-vi",z:"bep",name:"Giá dao thớt – gia vị",goc:4180000},
-  {id:"g-gao",z:"bep",name:"Thùng gạo",goc:3500000},
-  {id:"g-rac",z:"bep",name:"Thùng rác",goc:2200000},
-  {id:"g-goc",z:"bep",name:"Hệ góc / mâm xoay",goc:4200000},
-  {id:"g-hut",z:"bep",name:"Máy hút mùi",goc:9590000},
-  {id:"g-chau",z:"bep",name:"Chậu rửa",goc:4500000},
-  {id:"g-voi",z:"bep",name:"Vòi rửa",goc:2650000},
-  {id:"g-ao-gap",z:"ngu",name:"Ngăn kéo đồ gấp",goc:5300000},
-  {id:"g-giay",z:"ngu",name:"Giá giày xoay",goc:8890000}
-];
 function seq(){const n=+(localStorage.wotu_n||0)+1;localStorage.wotu_n=n;return"WOTU-Q-"+String(n).padStart(6,"0")}
-function go(p,extra){S.page=p;S.extra=extra||null;S.msg="";render()}
+function go(p,ex){S.page=p;S.extra=ex||null;S.busy=false;render()}
 function head(back){
-  return `<div class="top">
-    <div class="brand"><div class="mark">W</div><div><b>WO<span>TU</span></b><small>Nội thất cho tổ ấm Việt</small></div></div>
-    <div class="links">
-      <a href="${WEB}" target="_blank" rel="noopener">wotu.vn</a>
-      <a href="${FB}" target="_blank" rel="noopener">Facebook</a>
-      <a href="tel:${PHONE}">Gọi Tú</a>
-      <a href="${ZALO}" target="_blank" rel="noopener">Zalo</a>
-    </div>
-  </div>
-  ${back?`<button class="btn btn-g" onclick="go('${back}')" style="width:auto;padding:8px 14px">← Quay lại</button>`:""}`;
+ return `<div class="top">
+ <div class="brand"><div class="mark">W</div><div><b>WO<i>TU</i></b><small>Nội thất cho tổ ấm Việt</small></div></div>
+ <div class="links no-print">
+ <a class="pill" href="${WEB}" target="_blank">wotu.vn</a>
+ <a class="pill" href="${FB}" target="_blank">Facebook</a>
+ <a class="pill" href="tel:${PHONE}">Gọi Tú</a>
+ <a class="pill" href="${ZALO}" target="_blank">Zalo</a>
+ </div>
+ </div>${back?`<button class="btn btn-g no-print" style="width:auto;padding:8px 14px" onclick="go('${back}')">← Quay lại</button>`:""}`;
 }
-function priceHTML(b){
-  return `<div class="price">
-    <div class="r"><span>Thành tiền chưa VAT</span><span>${VND(b.sub)}</span></div>
-    <div class="r"><span>VAT 8%</span><span>${VND(b.vat)}</span></div>
-    <div class="t"><span>Tổng cộng</span><b>${VND(b.total)}</b></div>
-  </div>
-  <p class="note">VAT 8% theo Nghị quyết 204/2025/QH15, áp đến 31/12/2026. Sau đó mặc định 10% nếu không gia hạn. Báo giá sơ bộ — chi tiết gọi ${PHONE} Tú.</p>`;
+function vatBlock(m){
+ return `<div class="price">
+ <div class="r"><span>Thành tiền chưa VAT</span><span>${VND(m.sub)}</span></div>
+ <div class="r"><span>VAT 8%</span><span>${VND(m.vat)}</span></div>
+ <div class="t"><span>Tổng cộng</span><b>${VND(m.total)}</b></div>
+ </div>
+ <p class="note">VAT 8% theo Nghị quyết 204/2025/QH15, áp đến 31/12/2026. Báo giá sơ bộ — không phải hợp đồng.</p>`;
 }
-function actions(quote){
-  return `<button class="btn btn-p" onclick='saveQ(${JSON.stringify(quote)})'>Lưu & gửi tư vấn</button>
-  <a class="btn btn-g" href="${ZALO}" target="_blank" rel="noopener" style="display:block;text-align:center">Chat Zalo với Tú</a>
-  <a class="btn btn-g" href="tel:${PHONE}" style="display:block;text-align:center">Gọi 0944 437 238</a>`;
+function matNote(){
+ return `<p class="note">Vật liệu MDF chống ẩm phủ Melamine: ACCPANEL, KES, S6, Mộc Phát, BMH. Cánh Acrylic: LIVAS, ALD. Quý khách dùng An Cường, Minh Long hoặc thương hiệu khác vui lòng liên hệ WOTU để được báo giá lại. Hotline ${PHONE} — Tú.</p>`;
 }
 async function sendMail(row){
-  const body={
-    _subject:"Lead WOTU "+row.code,
-    ten:row.c.fullName, sdt:row.c.phone, diachi:row.c.address,
-    ma:row.code, loai:row.quote.type, chitiet:row.quote.detail||"",
-    chuaVAT:VND(row.quote.money.sub), vat:VND(row.quote.money.vat), tong:VND(row.quote.money.total)
-  };
-  try{
-    await fetch("https://formsubmit.co/ajax/"+MAIL,{
-      method:"POST",
-      headers:{"Content-Type":"application/json","Accept":"application/json"},
-      body:JSON.stringify(body)
-    });
-    S.msg="Đã gửi yêu cầu về email WOTU.";
-  }catch(e){
-    location.href="mailto:"+MAIL+"?subject="+encodeURIComponent("Lead "+row.code)+"&body="+encodeURIComponent(JSON.stringify(body,null,2));
-  }
+ const body={_subject:"Lead WOTU "+row.code,ten:row.c.fullName,sdt:row.c.phone,diachi:row.c.address,ma:row.code,loai:row.quote.type,chitiet:row.quote.detail||"",tong:VND(row.quote.money.total)};
+ try{
+ await fetch("https://formsubmit.co/ajax/"+MAIL,{method:"POST",headers:{"Content-Type":"application/json","Accept":"application/json"},body:JSON.stringify(body)});
+ S.msg="Đã gửi thông tin về email WOTU.";
+ }catch(e){S.msg="Không gửi được mail tự động. Dùng Zalo hoặc gọi Tú."}
 }
-function saveQ(quote){
-  if(!S.c) return go("welcome");
-  const row={code:seq(),c:S.c,quote,at:new Date().toISOString()};
-  S.quotes.unshift(row); localStorage.wotu_q=JSON.stringify(S.quotes.slice(0,80));
-  sendMail(row); go("done",row);
+function savePdf(quote){
+ if(!S.c)return go("welcome");
+ const row={code:seq(),c:S.c,quote,at:new Date().toISOString()};
+ S.quotes.unshift(row);localStorage.wotu_q=JSON.stringify(S.quotes.slice(0,80));
+ sendMail(row);S.extra=row;S.page="done";render();setTimeout(()=>window.print(),500);
 }
 function welcome(){
-  return `${head()}
-  <h1>Phần mềm báo giá tự động</h1>
-  <p class="lead">Xin chào quý khách đã đến với WOTU. Nhập thông tin để nhận báo giá sơ bộ.</p>
-  <div class="card">
-    <label>Họ và tên *<input id="fn" value="${S.c?.fullName||""}"></label>
-    <label>Số điện thoại *<input id="ph" inputmode="tel" value="${S.c?.phone||""}"></label>
-    <label>Địa chỉ *<input id="ad" value="${S.c?.address||""}"></label>
-    <label style="display:flex;gap:10px;align-items:flex-start;font-weight:400">
-      <input type="checkbox" id="ok" ${S.c?.consent?"checked":""} style="width:auto;margin-top:3px">
-      Đồng ý để WOTU lưu thông tin nhằm lập báo giá và tư vấn.
-    </label>
-    <div class="err" id="er"></div>
-    <button class="btn btn-p" onclick="submitC()">Tiếp tục</button>
-  </div>
-  <p class="note"><a href="${WEB}" target="_blank">wotu.vn</a> · <a href="${FB}" target="_blank">Facebook</a> · <a href="${ZALO}" target="_blank">Zalo Tú</a></p>`;
+ return `${head()}
+ <p class="kicker">WOTU Studio</p>
+ <h1>Báo giá thiết kế<br>và nội thất.</h1>
+ <p class="lead">Một lần nhập thông tin — nhận báo giá sơ bộ, tải PDF và được chăm sóc qua Zalo.</p>
+ <div class="card">
+ <label>Họ và tên *<input id="fn" value="${S.c?.fullName||""}" autocomplete="name"></label>
+ <label>Số điện thoại *<input id="ph" inputmode="tel" value="${S.c?.phone||""}"></label>
+ <label>Địa chỉ *<input id="ad" value="${S.c?.address||""}"></label>
+ <label style="display:flex;gap:8px;font-weight:400"><input type="checkbox" id="ok" ${S.c?.consent?"checked":""} style="width:auto"> Đồng ý để WOTU lưu thông tin nhằm lập báo giá và tư vấn.</label>
+ <div class="err" id="er"></div>
+ <button class="btn btn-p" onclick="submitC()">Bắt đầu</button>
+ </div>`;
 }
 function submitC(){
-  const fullName=fn.value.trim(), phone=ph.value.replace(/[\s.\-]/g,""), address=ad.value.trim(), consent=ok.checked, e=[];
-  if(!fullName) e.push("Nhập họ tên.");
-  if(!/^(0|\+84)(3|5|7|8|9)\d{8}$/.test(phone)) e.push("SĐT Việt Nam không hợp lệ.");
-  if(!address) e.push("Nhập địa chỉ.");
-  if(!consent) e.push("Cần đồng ý xử lý dữ liệu.");
-  if(e.length){er.textContent=e.join(" ");return}
-  S.c={fullName,phone,address,consent}; localStorage.wotu_c=JSON.stringify(S.c); go("home");
+ const fullName=fn.value.trim(),phone=ph.value.replace(/[\s.\-]/g,""),address=ad.value.trim(),consent=ok.checked,e=[];
+ if(!fullName)e.push("Nhập họ tên.");
+ if(!/^(0|\+84)(3|5|7|8|9)\d{8}$/.test(phone))e.push("Số điện thoại Việt Nam không hợp lệ.");
+ if(!address)e.push("Nhập địa chỉ.");
+ if(!consent)e.push("Cần đồng ý xử lý dữ liệu.");
+ if(e.length){er.textContent=e.join(" ");return}
+ S.c={fullName,phone,address,consent};localStorage.wotu_c=JSON.stringify(S.c);go("home");
 }
 function home(){
-  return `${head()}
-  <p class="lead">Xin chào, <b>${S.c.fullName}</b>. Chọn hạng mục cần báo giá.</p>
-  <div class="grid g3">
-    <div class="card"><b>Thiết kế</b><p class="note">Ba gói thiết kế nhà.</p><button class="btn btn-p" onclick="go('design')">Bắt đầu</button></div>
-    <div class="card"><b>Xây trọn gói</b><p class="note">Chìa khóa trao tay.</p><button class="btn btn-p" onclick="go('build')">Bắt đầu</button></div>
-    <div class="card"><b>Nội thất</b><p class="note">Chọn khu, chọn món.</p><button class="btn btn-p" onclick="go('interior')">Bắt đầu</button></div>
-  </div>`;
+ return `${head()}
+ <p class="lead">Xin chào, <b>${S.c.fullName}</b>. Chọn dịch vụ cần báo giá.</p>
+ <div class="hero">
+ <div class="card"><span class="kicker">01</span><b>Thiết kế</b><p class="note">Mô tả căn hộ hoặc nhà — hệ thống đọc diện tích và gói.</p><button class="btn btn-p" onclick="go('design')">Mở thiết kế</button></div>
+ <div class="card"><span class="kicker">02</span><b>Nội thất</b><p class="note">Mô tả bếp, tủ áo — hệ thống điền hạng mục để bạn duyệt.</p><button class="btn btn-p" onclick="go('interior')">Mở nội thất</button></div>
+ </div>`;
+}
+function parseDesign(t){
+ const low=t.toLowerCase().replace(",",".");
+ const m=low.match(/(\d+(?:\.\d+)?)\s*m\s*2|(\d+(?:\.\d+)?)\s*m²/);
+ const area=m?+(m[1]||m[2]):null;
+ let pkg="co-ban";
+ if(/tiết kiệm|tiet kiem/.test(low))pkg="tiet-kiem";
+ if(/hoàn thiện|hoan thien/.test(low))pkg="hoan-thien";
+ if(/cơ bản|co ban/.test(low))pkg="co-ban";
+ return{area,pkg};
+}
+function analyzeD(){
+ S.dText=document.getElementById("dt").value;S.busy=true;S.dQuote=null;render();
+ setTimeout(()=>{
+ const r=parseDesign(S.dText);S.busy=false;
+ if(!r.area){S.dAsk={need:"area"};render();return}
+ if(r.area<30){S.dAsk={need:"small",area:r.area};render();return}
+ S.dAsk={need:"ok",area:r.area,pkg:r.pkg};render();
+ },550);
+}
+function confirmD(){
+ const a=S.dAsk,g=PKG[a.pkg],m=money(a.area*g.p);
+ S.dQuote={type:"Thiết kế",detail:`${g.name} · ${a.area} m²`,lines:[{name:"Thiết kế — gói "+g.name,spec:`Diện tích ${a.area} m². ${g.inc.join("; ")}. Sửa tối đa 3 lần.`,amt:a.area*g.p}],money:m};
+ render();
 }
 function design(){
-  const pkg=DESIGN.find(p=>p.id===S.dPkg);
-  const m=money((S.dArea||0)*pkg.price);
-  return `${head("home")}<h1>Chi phí thiết kế</h1>
-  <label>Gói thiết kế
-    <select onchange="S.dPkg=this.value;S.dDone=false;render()">
-      ${DESIGN.map(p=>`<option value="${p.id}" ${S.dPkg===p.id?"selected":""}>${p.name}</option>`).join("")}
-    </select>
-  </label>
-  <label>Tổng diện tích (m²)<input type="number" min="1" value="${S.dArea}" oninput="S.dArea=+this.value;S.dDone=false"></label>
-  <button class="btn btn-p" onclick="S.dDone=true;render()">Tính toán</button>
-  ${S.dDone&&S.dArea>0?priceHTML(m)+actions({type:"Thiết kế",detail:"Gói "+pkg.name+" · "+S.dArea+"m²",money:m}):""}
-  <button class="btn btn-g" onclick="go('home')">← Quay lại</button>`;
+ const a=S.dAsk,q=S.dQuote;
+ return `${head("home")}<p class="kicker">Thiết kế</p><h1>Mô tả nhu cầu.</h1>
+ <p class="lead">Ví dụ: căn hộ 65m2 gói cơ bản.</p>
+ <textarea id="dt">${S.dText}</textarea>
+ <button class="btn btn-p no-print" onclick="analyzeD()">Phân tích nhu cầu</button>
+ ${S.busy?`<div class="card wait"><span class="dot"></span> Đang đọc diện tích và gói…</div>`:""}
+ ${a?.need==="area"?`<div class="card"><b>Chưa thấy diện tích</b><p class="note">Nhập thêm số m², ví dụ 65m2.</p></div>`:""}
+ ${a?.need==="small"?`<div class="card"><b>${a.area} m²</b><p class="note">Dưới 30 m² vui lòng liên hệ trực tiếp.</p><a class="btn btn-p" href="${ZALO}" target="_blank" style="display:block;text-align:center">Zalo Tú</a></div>`:""}
+ ${a?.need==="ok"&&!q?`<div class="card"><b>Đã nhận ${a.area} m² · gói ${PKG[a.pkg].name}</b>
+ <p class="note">Bạn muốn xem báo giá sơ bộ? Có thể đổi gói trước khi chốt.</p>
+ <label>Gói<select onchange="S.dAsk.pkg=this.value">${Object.entries(PKG).map(([k,v])=>`<option value="${k}" ${a.pkg===k?"selected":""}>${v.name}</option>`).join("")}</select></label>
+ <label>Diện tích (m²)<input type="number" value="${a.area}" oninput="S.dAsk.area=+this.value"></label>
+ <button class="btn btn-p" onclick="confirmD()">Đồng ý, xem báo giá</button></div>`:""}
+ ${q?quoteView(q):""}`;
 }
-function calcBuild(){
-  const unit=(S.house==="villa"?BUILD.villa:BUILD.normal)[S.bPkg];
-  const base=S.land+S.w*Math.max(0,S.bal);
-  let sub=0;
-  S.floors.forEach(f=>{sub+=base*(f.k==="ton"?Math.max(0,unit-500000):unit)});
-  if(S.road==="hem-nho") sub*=1.2;
-  return money(Math.round(sub));
+function num(s){return s?+String(s).replace(",","."):0}
+function parseInterior(t){
+ const low=t.toLowerCase();
+ const out={bep:null,tu:null};
+ const bm=low.match(/bếp[^0-9]{0,10}(\d+[.,]?\d*)\s*m(?!\s*2)/);
+ if(bm) out.bep={w:num(bm[1])};
+ const tm=low.match(/tủ\s*(đồ|áo|quần áo)?[^0-9]{0,10}(\d+[.,]?\d*)\s*(m2|m²|m)/);
+ if(tm) out.tu={v:num(tm[2]),unit:/m2|m²/.test(tm[3]||"")?"m2":"ngang"};
+ else if(/tủ|1m9|1m8/.test(low)){
+ const n=low.match(/(\d+[.,]?\d*)\s*m/);
+ if(n&&!bm) out.tu={v:num(n[1]),unit:"?"};
+ }
+ return out;
 }
-function build(){
-  const mis=Math.abs(S.w*S.l-S.land)>0.05;
-  const m=calcBuild();
-  return `${head("home")}<h1>Xây dựng trọn gói</h1>
-  <div class="grid g2">
-    <label>Loại nhà
-      <select onchange="S.house=this.value;S.bDone=false;render()">
-        <option value="nha-ong" ${S.house==="nha-ong"?"selected":""}>Nhà ống</option>
-        <option value="hai-mat-tien" ${S.house==="hai-mat-tien"?"selected":""}>Nhà 2 mặt tiền</option>
-        <option value="mai-thai" ${S.house==="mai-thai"?"selected":""}>Nhà mái thái</option>
-        <option value="villa" ${S.house==="villa"?"selected":""}>Villa / biệt thự</option>
-      </select>
-    </label>
-    <label>Đường trước nhà
-      <select onchange="S.road=this.value;S.bDone=false;render()">
-        <option value="o-to">Đường ô tô</option>
-        <option value="hem-lon" ${S.road==="hem-lon"?"selected":""}>Hẻm lớn</option>
-        <option value="hem-nho" ${S.road==="hem-nho"?"selected":""}>Hẻm nhỏ</option>
-      </select>
-    </label>
-    <label>Ngang (m)<input type="number" value="${S.w}" oninput="S.w=+this.value;S.confirm=false;S.bDone=false"></label>
-    <label>Dài (m)<input type="number" value="${S.l}" oninput="S.l=+this.value;S.confirm=false;S.bDone=false"></label>
-    <label>Diện tích đất (m²)<input type="number" value="${S.land}" oninput="S.land=+this.value;S.confirm=false;S.bDone=false"></label>
-    <label>Ban công nhô (m)<input type="number" value="${S.bal}" oninput="S.bal=+this.value;S.bDone=false"></label>
-  </div>
-  <p class="note">Ngang × dài = ${(S.w*S.l).toFixed(2)} m². Ô tô và hẻm lớn cùng giá. Hẻm nhỏ +20%. Tôn giảm 500.000đ/m² so với sàn BTCT.</p>
-  ${mis?`<div class="card"><p class="err" style="margin:0">Diện tích đất không khớp ngang × dài.</p>
-    <label style="display:flex;gap:8px;align-items:center"><input type="checkbox" style="width:auto" ${S.confirm?"checked":""} onchange="S.confirm=this.checked;render()"> Xác nhận dùng diện tích đất đã nhập</label></div>`:""}
-  <label>Số sàn<input type="number" min="1" max="12" value="${S.floors.length}" oninput="const n=Math.max(1,+this.value||1);S.floors=Array.from({length:n},(_,i)=>S.floors[i]||{k:'btct'});S.bDone=false;render()"></label>
-  ${S.floors.map((f,i)=>`<label>Sàn ${i+1}
-    <select onchange="S.floors[${i}].k=this.value;S.bDone=false;render()">
-      <option value="btct" ${f.k==="btct"?"selected":""}>Sàn / mái BTCT</option>
-      <option value="ton" ${f.k==="ton"?"selected":""}>Lợp tôn</option>
-    </select></label>`).join("")}
-  <label>Gói
-    <select onchange="S.bPkg=this.value;S.bDone=false;render()">
-      <option value="co-ban" ${S.bPkg==="co-ban"?"selected":""}>Cơ bản</option>
-      <option value="trung-binh" ${S.bPkg==="trung-binh"?"selected":""}>Trung bình</option>
-      <option value="cao-cap" ${S.bPkg==="cao-cap"?"selected":""}>Cao cấp</option>
-    </select>
-  </label>
-  <button class="btn btn-p" ${mis&&!S.confirm?"disabled":""} onclick="S.bDone=true;render()">Tính toán</button>
-  ${S.bDone?priceHTML(m)+actions({type:"Xây dựng",detail:S.house+" · "+S.bPkg,money:m}):""}
-  <button class="btn btn-g" onclick="go('home')">← Quay lại</button>`;
+function analyzeI(){
+ S.iText=document.getElementById("it").value;S.busy=true;S.iQuote=null;render();
+ setTimeout(()=>{
+ const p=parseInterior(S.iText);S.busy=false;
+ if(p.tu&&p.tu.unit==="?"){S.iAsk={type:"unit",v:p.tu.v,p};render();return}
+ if(p.tu&&p.tu.unit==="ngang"&&!p.tu.h){S.iAsk={type:"height",v:p.tu.v,p};render();return}
+ S.iAsk={type:"ok"};S.iDraft=buildDraft(p);render();
+ },550);
 }
-function ledBox(id){
-  const md=S.led[id]||0;
-  return `<label>Đèn LED (md)
-    <input type="number" min="0" step="0.1" value="${md}" oninput="S.led['${id}']=+this.value||0">
-  </label>
-  <p class="note">250.000đ/md. Có LED thì tự thêm cảm biến nhấn mở 200.000đ/hệ.</p>`;
+function setUnit(u){const p=S.iAsk.p;p.tu.unit=u;if(u==="ngang"){S.iAsk={type:"height",v:p.tu.v,p};render();return}S.iAsk={type:"ok"};S.iDraft=buildDraft(p);render()}
+function setHeight(){const h=+document.getElementById("ih").value||2.4;const p=S.iAsk.p;p.tu.h=h;p.tu.m2=+(p.tu.v*h).toFixed(2);S.iAsk={type:"ok"};S.iDraft=buildDraft(p);render()}
+function buildDraft(p){return{bepOn:!!p.bep,tuOn:!!p.tu,bepW:p.bep?p.bep.w:3,tuM2:p.tu?(p.tu.m2||p.tu.v):1.9,da:true,kinh:true,led:true}}
+function linesFromDraft(d){
+ const L=[];
+ if(d.bepOn){
+ const w=d.bepW||0;
+ L.push({name:"Tủ bếp dưới",spec:`Thùng MDF chống ẩm phủ Melamine (ACCPANEL / KES / S6 / Mộc Phát / BMH), cánh Melamine. Ngang ${w} m · cao 850 mm.`,amt:w*2100000});
+ L.push({name:"Tủ bếp trên",spec:`Cùng vật liệu. Ngang ${w} m · cao 700 mm.`,amt:w*2000000});
+ if(d.da) L.push({name:"Mặt đá bếp",spec:`Đá kim sa. Dài ${w} m.`,amt:w*1350000});
+ if(d.kinh) L.push({name:"Ốp đứng bếp",spec:`Kính sơn màu 8li. Dài ${w} m.`,amt:w*850000});
+ if(d.led) L.push({name:"Đèn LED bếp",spec:`LED theo chiều dài bếp + cảm biến nhấn mở.`,amt:w*250000+200000});
+ }
+ if(d.tuOn) L.push({name:"Tủ quần áo — ngủ master",spec:`Thùng MDF chống ẩm phủ Melamine. Quy đổi ${d.tuM2} m² theo kích thước yêu cầu.`,amt:d.tuM2*1950000});
+ return L;
 }
-function ledMoney(id){const md=S.led[id]||0;return md>0?md*250000+200000:0}
-function accMoney(z){
-  let sub=0,sl=0;
-  GARIS.filter(g=>g.z===z).forEach(g=>{
-    const q=S.acc[g.id]||0; if(q>0){sub+=q*g.goc*0.6; sl+=q}
-  });
-  return sub+sl*150000;
-}
-function accUI(z){
-  return GARIS.filter(g=>g.z===z).map(g=>`<label>${g.name} (bộ)
-    <input type="number" min="0" value="${S.acc[g.id]||0}" oninput="S.acc['${g.id}']=+this.value||0">
-    <span class="strike">${VND(g.goc)}</span> → <b>${VND(g.goc*0.6)}</b>
-  </label>`).join("")+`<p class="note">Phụ kiện giảm 40%. Lắp 150.000đ × số lượng.</p>`;
-}
-function interiorSub(){
-  let s=0;
-  if(S.open.khach){
-    s+=(S.kh.ke||0)*1650000+(S.kh.giay||0)*1900000+(S.kh.rem||0)*390000;
-    s+=(S.kh.op==="mel"?750000:S.kh.op==="tre"?1200000:S.kh.op==="lam"?450000:0)*(S.kh.opm||0);
-    s+=ledMoney("khach");
-  }
-  if(S.open.bep){
-    const ac=S.bep.canh==="acrylic"?500000:0;
-    const add=(kind,md,key)=>{if(!kind||!md)return 0;return md*((BEP_BOX[kind][key]||0)+ac)};
-    s+=add(S.bep.duoi,S.bep.mdD,"d")+add(S.bep.tren,S.bep.mdT,"t")+add(S.bep.kich,S.bep.mdK,"k");
-    if(S.bep.da) s+=(S.bep.mdDa||0)*(DA[S.bep.da]||0);
-    if(S.bep.op) s+=(S.bep.mdOp||0)*(OPB[S.bep.op]||0);
-    if(S.bep.lanh){
-      const base=S.bep.lanh==="mdf"?2500000:S.bep.lanh==="plywood"?3300000:3500000;
-      s+=base+(S.bep.lanhCanh==="acrylic"?500000:0);
-    }
-    if(S.bep.bon) s+=900000;
-    s+=ledMoney("bep")+accMoney("bep");
-  }
-  if(S.open.an){
-    if(S.an.tu==="mdf") s+=(S.an.m2||0)*2250000;
-    if(S.an.tu==="nhom") s+=(S.an.m2||0)*2750000;
-    if(S.an.ban==="4") s+=4000000;
-    if(S.an.ban==="6") s+=6000000;
-    s+=ledMoney("an");
-  }
-  ["master","n2","n3"].forEach(id=>{
-    if(!S.open[id]) return;
-    const n=S.ngu[id];
-    let tu=n.tu==="mdf"?1950000:n.tu==="plywood"?2450000:n.tu==="nhua"?2650000:0;
-    if(tu && (n.canh==="acrylic"||n.canh==="nhom")) tu+=900000;
-    s+=(n.m2||0)*tu;
-    s+=(n.giuong==="14"?4e6:n.giuong==="16"?43e5:n.giuong==="18"?46e5:n.giuong==="20"?5e6:0);
-    s+=(n.hoc||0)*250000;
-    s+=(n.tab==="nho"?900000:n.tab==="lon"?1200000:0);
-    s+=(n.td==="dung"?3e6:n.td==="treo"?25e5:0)*(n.tdmd||0);
-    s+=(n.rem||0)*390000;
-    s+=ledMoney(id)+accMoney("ngu");
-  });
-  if(S.open.tho){
-    s+=(S.tho.vach==="cnc"?1200000:S.tho.vach==="nano"?900000:0)*(S.tho.m2||0);
-    s+=ledMoney("tho");
-  }
-  return s;
-}
-function room(id,title,inner){
-  const on=!!S.open[id];
-  return `<div class="card">
-    <label style="display:flex;gap:10px;align-items:center;margin:0;font-weight:700">
-      <input type="checkbox" style="width:auto" ${on?"checked":""} onchange="S.open['${id}']=this.checked;render()">
-      ${title}
-    </label>
-    ${on?inner:`<p class="note">Chưa chọn khu này</p>`}
-  </div>`;
-}
+function confirmI(){const L=lines FromDraft(S.iDraft);S.iQuote={type:"Nội thất",detail:S.iText,lines:L,money:money(L.reduce((s,x)=>s+x.amt,0))};render()}
 function interior(){
-  const m=money(interiorSub());
-  const has=Object.values(S.open).some(Boolean);
-  return `${head("home")}
-  <h1>Nội thất</h1>
-  <p class="lead"><b>Bạn cần làm nội thất vị trí gì?</b></p>
-  ${room("khach","Phòng khách",`
-    <label>Kệ TV (md)<input type="number" min="0" step="0.1" value="${S.kh.ke}" oninput="S.kh.ke=+this.value||0"></label>
-    <label>Ốp tường
-      <select onchange="S.kh.op=this.value;render()">
-        <option value="">Không</option>
-        <option value="mel" ${S.kh.op==="mel"?"selected":""}>MDF Melamine</option>
-        <option value="tre" ${S.kh.op==="tre"?"selected":""}>Than tre</option>
-        <option value="lam" ${S.kh.op==="lam"?"selected":""}>Lam sóng nano nhựa</option>
-      </select>
-    </label>
-    ${S.kh.op?`<label>Diện tích ốp (m²)<input type="number" min="0" step="0.1" value="${S.kh.opm||0}" oninput="S.kh.opm=+this.value||0"></label>`:""}
-    <label>Tủ giày (m²)<input type="number" min="0" step="0.1" value="${S.kh.giay}" oninput="S.kh.giay=+this.value||0"></label>
-    <label>Rèm 2 lớp (m²)<input type="number" min="0" step="0.1" value="${S.kh.rem}" oninput="S.kh.rem=+this.value||0"></label>
-    ${ledBox("khach")}`)}
-  ${room("bep","Bếp",`
-    <label>Tủ dưới
-      <select onchange="S.bep.duoi=this.value;render()"><option value="">Không</option><option value="mdf">MDF</option><option value="plywood">Plywood</option><option value="nhua">Nhựa</option></select>
-    </label>
-    ${S.bep.duoi?`<label>Md tủ dưới<input type="number" min="0" step="0.1" value="${S.bep.mdD}" oninput="S.bep.mdD=+this.value||0"></label>`:""}
-    <label>Tủ trên
-      <select onchange="S.bep.tren=this.value;render()"><option value="">Không</option><option value="mdf">MDF</option><option value="plywood">Plywood</option><option value="nhua">Nhựa</option></select>
-    </label>
-    ${S.bep.tren?`<label>Md tủ trên<input type="number" min="0" step="0.1" value="${S.bep.mdT}" oninput="S.bep.mdT=+this.value||0"></label>`:""}
-    <label>Tủ kịch trần
-      <select onchange="S.bep.kich=this.value;render()"><option value="">Không</option><option value="mdf">MDF</option><option value="plywood">Plywood</option><option value="nhua">Nhựa</option></select>
-    </label>
-    ${S.bep.kich?`<label>Md kịch trần<input type="number" min="0" step="0.1" value="${S.bep.mdK}" oninput="S.bep.mdK=+this.value||0"></label>`:""}
-    <label>Cánh
-      <select onchange="S.bep.canh=this.value"><option value="melamine">Melamine</option><option value="acrylic" ${S.bep.canh==="acrylic"?"selected":""}>Acrylic bóng gương</option></select>
-    </label>
-    <label>Mặt đá
-      <select onchange="S.bep.da=this.value;render()"><option value="">Không</option><option value="su">Đá sứ</option><option value="kimsa">Đá kim sa</option><option value="lamar">Đá lamar</option></select>
-    </label>
-    ${S.bep.da?`<label>Md mặt đá<input type="number" min="0" step="0.1" value="${S.bep.mdDa||0}" oninput="S.bep.mdDa=+this.value||0"></label>`:""}
-    <label>Ốp đứng
-      <select onchange="S.bep.op=this.value;render()"><option value="">Không</option><option value="su">Đá sứ</option><option value="kimsa">Đá kim sa</option><option value="lamar">Đá lamar</option><option value="k8">Kính sơn 8li</option><option value="k6">Kính sơn 6li</option></select>
-    </label>
-    ${S.bep.op?`<label>Md ốp đứng<input type="number" min="0" step="0.1" value="${S.bep.mdOp||0}" oninput="S.bep.mdOp=+this.value||0"></label>`:""}
-    <label>Khung tủ lạnh
-      <select onchange="S.bep.lanh=this.value;render()"><option value="">Không</option><option value="mdf">MDF</option><option value="plywood">Plywood</option><option value="nhua">Nhựa</option></select>
-    </label>
-    ${S.bep.lanh?`<label>Cánh khung lạnh
-      <select onchange="S.bep.lanhCanh=this.value"><option value="melamine">Melamine</option><option value="acrylic" ${S.bep.lanhCanh==="acrylic"?"selected":""}>Acrylic</option></select>
-    </label>`:""}
-    ${S.bep.duoi==="mdf"||S.bep.tren==="mdf"||S.bep.kich==="mdf"?`<label style="display:flex;gap:8px;align-items:center"><input type="checkbox" style="width:auto" ${S.bep.bon?"checked":""} onchange="S.bep.bon=this.checked"> Thùng nhựa bồn rửa (900.000đ/bộ)</label>`:""}
-    ${ledBox("bep")}${accUI("bep")}`)}
-  ${room("an","Phòng ăn",`
-    <label>Tủ rượu
-      <select onchange="S.an.tu=this.value;render()"><option value="">Không</option><option value="mdf">MDF cánh kính MDF</option><option value="nhom">Cánh nhôm kính</option></select>
-    </label>
-    ${S.an.tu?`<label>Diện tích (m²)<input type="number" min="0" step="0.1" value="${S.an.m2}" oninput="S.an.m2=+this.value||0"></label>`:""}
-    <label>Bàn ăn sắt mặt đá, ghế sắt bọc nệm
-      <select onchange="S.an.ban=this.value"><option value="">Không</option><option value="4" ${S.an.ban==="4"?"selected":""}>4 ghế — 4.000.000đ</option><option value="6" ${S.an.ban==="6"?"selected":""}>6 ghế — 6.000.000đ</option></select>
-    </label>
-    ${ledBox("an")}`)}
-  ${["master","n2","n3"].map((id,i)=>room(id,"Phòng ngủ "+(i===0?"master":i+1), nguUI(id))).join("")}
-  ${room("tho","Phòng thờ",`
-    <label>Vách / ốp
-      <select onchange="S.tho.vach=this.value;render()"><option value="">Không</option><option value="cnc">CNC MDF sơn cạnh</option><option value="nano">Nano lam + họa tiết CNC</option></select>
-    </label>
-    ${S.tho.vach?`<label>Diện tích (m²)<input type="number" min="0" step="0.1" value="${S.tho.m2}" oninput="S.tho.m2=+this.value||0"></label>`:""}
-    <p class="note">Bàn thờ tùy kiểu — giá báo sau qua Zalo / điện thoại Tú.</p>
-    ${ledBox("tho")}`)}
-  <button class="btn btn-p" ${has?"":"disabled"} onclick="S.iDone=true;render()">Tính toán</button>
-  ${S.iDone&&has?priceHTML(m)+actions({type:"Nội thất",detail:"Theo khu đã chọn",money:m}):""}
-  <button class="btn btn-g" onclick="go('home')">← Quay lại</button>`;
+ const a=S.iAsk,d=S.iDraft,q=S.iQuote;
+ return `${head("home")}<p class="kicker">Nội thất</p><h1>Mô tả không gian.</h1>
+ <p class="lead">Ví dụ: làm bếp 3m, tủ đồ 1m9.</p>
+ <textarea id="it">${S.iText}</textarea>
+ <button class="btn btn-p no-print" onclick="analyzeI()">Phân tích nhu cầu</button>
+ ${S.busy?`<div class="card wait"><span class="dot"></span> Đang tách hạng mục và kích thước…</div>`:""}
+ ${a?.type==="unit"?`<div class="card"><b>${a.v} m là m² hay chiều ngang tủ?</b>
+ <button class="btn btn-p" onclick="setUnit('m2')">Là m²</button>
+ <button class="btn btn-g" onclick="setUnit('ngang')">Là chiều ngang</button></div>`:""}
+ ${a?.type==="height"?`<div class="card"><b>Ngang ${a.v} m. Chiều cao tủ?</b>
+ <label>Mét cao<input id="ih" type="number" step="0.1" value="2.4"></label>
+ <p class="note">Gợi ý tủ áo 2,4 m.</p>
+ <button class="btn btn-p" onclick="setHeight()">Tiếp tục</button></div>`:""}
+ ${a?.type==="ok"&&d&&!q?`<div class="card"><b>Nhu cầu đã đúng chưa?</b>
+ <p class="note">Bếp được gợi ý thêm đá kim sa, kính 8li và LED. Bỏ tick nếu không cần.</p>
+ <label style="display:flex;gap:8px"><input type="checkbox" style="width:auto" ${d.bepOn?"checked":""} onchange="S.iDraft.bepOn=this.checked;render()"> Bếp</label>
+ ${d.bepOn?`<label>Ngang bếp (m)<input type="number" step="0.1" value="${d.bepW}" oninput="S.iDraft.bepW=+this.value"></label>
+ <label style="display:flex;gap:8px"><input type="checkbox" style="width:auto" ${d.da?"checked":""} onchange="S.iDraft.da=this.checked"> Mặt đá kim sa</label>
+ <label style="display:flex;gap:8px"><input type="checkbox" style="width:auto" ${d.kinh?"checked":""} onchange="S.iDraft.kinh=this.checked"> Kính ốp 8li</label>
+ <label style="display:flex;gap:8px"><input type="checkbox" style="width:auto" ${d.led?"checked":""} onchange="S.iDraft.led=this.checked"> LED + cảm biến</label>`:""}
+ <label style="display:flex;gap:8px"><input type="checkbox" style="width:auto" ${d.tuOn?"checked":""} onchange="S.iDraft.tuOn=this.checked;render()"> Tủ áo ngủ master</label>
+ ${d.tuOn?`<label>Quy đổi m²<input type="number" step="0.1" value="${d.tuM2}" oninput="S.iDraft.tuM2=+this.value"></label>`:""}
+ <button class="btn btn-p" onclick="confirmI()">Đồng ý, xem báo giá</button></div>`:""}
+ ${q?quoteView(q):""}`;
 }
-function nguUI(id){
-  const n=S.ngu[id];
-  return `<label>Tủ áo
-    <select onchange="S.ngu.${id}.tu=this.value;render()"><option value="">Không</option><option value="mdf">MDF</option><option value="plywood">Plywood</option><option value="nhua">Nhựa</option></select>
-  </label>
-  ${n.tu?`<label>Cánh tủ áo
-    <select onchange="S.ngu.${id}.canh=this.value"><option value="">Mặc định</option><option value="acrylic">Acrylic +900k/m²</option><option value="nhom">Nhôm kính +900k/m²</option></select>
-  </label>
-  <label>Diện tích tủ (m²)<input type="number" min="0" step="0.1" value="${n.m2}" oninput="S.ngu.${id}.m2=+this.value||0"></label>`:""}
-  <label>Giường
-    <select onchange="S.ngu.${id}.giuong=this.value"><option value="">Không</option><option value="14">1m4</option><option value="16">1m6</option><option value="18">1m8</option><option value="20">2m</option></select>
-  </label>
-  <label>Hộc kéo (cái)<input type="number" min="0" value="${n.hoc}" oninput="S.ngu.${id}.hoc=+this.value||0"></label>
-  <label>Tab
-    <select onchange="S.ngu.${id}.tab=this.value"><option value="">Không</option><option value="nho">Nhỏ</option><option value="lon">Lớn</option></select>
-  </label>
-  <label>Bàn trang điểm
-    <select onchange="S.ngu.${id}.td=this.value;render()"><option value="">Không</option><option value="dung">Đứng</option><option value="treo">Treo</option></select>
-  </label>
-  ${n.td?`<label>Md trang điểm<input type="number" min="0" step="0.1" value="${n.tdmd}" oninput="S.ngu.${id}.tdmd=+this.value||0"></label>`:""}
-  <label>Rèm 2 lớp (m²)<input type="number" min="0" step="0.1" value="${n.rem}" oninput="S.ngu.${id}.rem=+this.value||0"></label>
-  ${ledBox(id)}${id==="master"?accUI("ngu"):""}`;
+function quoteView(q){
+ return `<div class="card sheet">
+ <span class="kicker">Báo giá sơ bộ</span>
+ <h1 style="font-size:1.4rem;margin-top:6px">WOTU</h1>
+ <p class="note">${S.c?S.c.fullName+" · "+S.c.phone+"<br>"+S.c.address:""}</p>
+ ${q.lines.map(l=>`<div class="line"><div><b>${l.name}</b><div class="note">${l.spec}</div></div><b>${VND(l.amt)}</b></div>`).join("")}
+ ${vatBlock(q.money)}${matNote()}
+ </div>
+ <button class="btn btn-p no-print" onclick='savePdf(${JSON.stringify(q)})'>Tải báo giá PDF</button>
+ <a class="btn btn-g no-print" href="${ZALO}" target="_blank" style="display:block;text-align:center">Chat Zalo với Tú</a>`;
 }
 function history(){
-  if(!S.quotes.length) return `${head("home")}<h1>Hồ sơ</h1><p class="lead">Chưa có báo giá.</p>`;
-  return `${head("home")}<h1>Hồ sơ</h1>`+S.quotes.map(q=>`<div class="card"><div class="row"><b>${q.code}</b><span>${VND(q.quote.money.total)}</span></div><p class="note">${q.quote.type} · ${q.c.fullName} · ${q.c.phone}<br>${new Date(q.at).toLocaleString("vi-VN")}</p></div>`).join("");
+ if(!S.quotes.length) return `${head("home")}<h1>Hồ sơ</h1><p class="lead">Chưa có báo giá.</p>`;
+ return `${head("home")}<h1>Hồ sơ</h1>`+S.quotes.map(q=>`<div class="card"><div style="display:flex;justify-content:space-between"><b>${q.code}</b><span>${VND(q.quote.money.total)}</span></div><p class="note">${q.quote.type} · ${new Date(q.at).toLocaleString("vi-VN")}</p></div>`).join("");
 }
 function done(){
-  const q=S.extra; if(!q) return history();
-  return `${head("history")}
-  <p class="note">Báo giá sơ bộ WOTU</p>
-  <h1>${q.code}</h1>
-  ${S.msg?`<p class="ok">${S.msg}</p>`:""}
-  <div class="card"><b>${q.c.fullName}</b><p class="note">${q.c.phone}<br>${q.c.address}</p></div>
-  <div class="card"><b>${q.quote.type}</b><p class="note">${q.quote.detail||""}</p></div>
-  ${priceHTML(q.quote.money)}
-  <a class="btn btn-p" href="${ZALO}" target="_blank" rel="noopener" style="display:block;text-align:center">Tiếp tục trên Zalo</a>
-  <button class="btn btn-g" onclick="go('home')">Làm báo giá khác</button>`;
+ const q=S.extra;if(!q)return history();
+ return `${head("home")}<p class="kicker">${q.code}</p><h1>Đã lập báo giá.</h1>
+ ${S.msg?`<p class="ok">${S.msg}</p>`:""}
+ ${quoteView(q.quote)}
+ <p class="note no-print">Trong hộp thoại in, chọn Save as PDF.</p>`;
 }
 function render(){
-  const map={welcome,home,design,build,interior,history,done};
-  app.innerHTML=(map[S.page]||home)();
-  nav.className=S.page==="welcome"?"nav hidden":"nav";
-  [...nav.querySelectorAll("button")].forEach(b=>b.className=b.dataset.go===S.page?"on":"");
+ const map={welcome,home,design,interior,history,done};
+ app.innerHTML=(map[S.page]||home)();
+ nav.className=S.page==="welcome"?"nav hidden":"nav";
+ [...nav.querySelectorAll("button")].forEach(b=>b.className=b.dataset.go===S.page?"on":"");
 }
-nav.onclick=e=>{if(e.target.dataset.go) go(e.target.dataset.go)};
+nav.onclick=e=>{if(e.target.dataset.go)go(e.target.dataset.go)};
 render();
 </script>
 </body>
