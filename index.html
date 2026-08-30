@@ -2,159 +2,190 @@
 <html lang="vi">
 <head>
 <meta charset="UTF-8"/>
-<meta name="viewport" content="width=device-width,initial-scale=1"/>
-<title>WOTU — Báo giá</title>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<meta name="color-scheme" content="light only"/>
+<title>WOTU — Bao gia thiet ke va noi that</title>
 <style>
-body{margin:0;font-family:system-ui,sans-serif;background:#f3efe8;color:#161616}
-.wrap{max-width:820px;margin:0 auto;padding:24px 16px 96px}
-.card{background:#fff;border-radius:18px;padding:16px;margin:12px 0;border:1px solid #e8e0d6}
-input,textarea,select{width:100%;padding:12px;margin-top:6px;border:1px solid #ddd;border-radius:12px;font:inherit;box-sizing:border-box}
-.btn{width:100%;padding:14px;border:0;border-radius:999px;background:#111;color:#fff;font-weight:700;margin-top:10px}
+body{margin:0;background:#f3efe8;color:#161616;font-family:Arial,Helvetica,sans-serif}
+.w{max-width:840px;margin:0 auto;padding:20px 16px 96px}
+.row{display:flex;justify-content:space-between;align-items:center;gap:10px}
+.logo{display:flex;gap:10px;align-items:center}
+.m{width:46px;height:46px;border-radius:14px;background:#111;color:#fff;text-align:center;line-height:46px;font-weight:800}
+h1{font-size:26px;margin:12px 0 8px}
+.muted{color:#6b645c;font-size:14px;line-height:1.5}
+.card{background:#fff;border:1px solid #e7e0d6;border-radius:18px;padding:16px;margin:12px 0}
+input,textarea,select{width:100%;box-sizing:border-box;padding:12px;margin-top:6px;border:1px solid #e0d8ce;border-radius:12px;font-size:16px}
+.btn{display:block;width:100%;box-sizing:border-box;padding:14px;margin-top:10px;border:0;border-radius:30px;background:#111;color:#fff;font-weight:700;font-size:16px}
 .btn2{background:#fff;color:#111;border:1px solid #ddd}
 a{color:#8f1d1d}
-.err{color:#8f1d1d;white-space:pre-wrap}
-.nav{position:fixed;left:0;right:0;bottom:0;display:flex;background:#fff;border-top:1px solid #eee}
-.nav button{flex:1;border:0;background:0;padding:14px;font-size:12px}
+.err{color:#8f1d1d}
+.nav{position:fixed;left:0;right:0;bottom:0;background:#fff;border-top:1px solid #eee;display:flex}
+.nav button{flex:1;border:0;background:0;padding:14px 0 16px;font-size:12px}
+.line{overflow:hidden;padding:10px 0;border-bottom:1px solid #eee}
+.tot{background:#111;color:#fff;border-radius:16px;padding:16px;margin-top:12px}
+@media print{.nav,.noprint{display:none!important}body{background:#fff}}
 </style>
 </head>
 <body>
-<div class="wrap" id="app">
- <h1>WOTU</h1>
- <p>Đang tải ứng dụng… Nếu chữ này không đổi sau 2 giây, script chưa chạy.</p>
+<div class="w" id="app">
+  <h1>WOTU</h1>
+  <p>Dang tai... Neu khong doi, hay mo bang Chrome.</p>
 </div>
-<nav class="nav">
- <button type="button" id="n1">Trang chủ</button>
- <button type="button" id="n2">Thiết kế</button>
- <button type="button" id="n3">Nội thất</button>
-</nav>
+<div class="nav noprint">
+  <button type="button" onclick="goHome()">Trang chu</button>
+  <button type="button" onclick="go('design')">Thiet ke</button>
+  <button type="button" onclick="go('interior')">Noi that</button>
+</div>
 <script>
-(function(){
-try{
-var VAT=0.08, MAIL="Huytu91@gmail.com", PHONE="0944437238";
-var WEB="https://wotu.vn", FB="https://www.facebook.com/wotuani", ZALO="https://zalo.me/0944437238";
-function VND(n){return Math.round(n).toLocale String("vi-VN")+"đ"}
-function money(s){s=Math.max(0,Math.round(s));var v=Math.round(s*VAT);return {sub:s,vat:v,total:s+v}}
-function jget(k,d){try{var x=localStorage.getItem(k);return x?JSON.parse(x):d}catch(e){return d}}
-function jset(k,v){try{localStorage.setItem(k,JSON.stringify(v))}catch(e){}}
-var S={page:"welcome",c:jget("wotu_c",null),quotes:jget("wotu_q",[]),dText:"Căn hộ 65m2 gói cơ bản",iText:"Làm bếp 3m, tủ đồ 1m9"};
-if(S.c&&S.c.fullName) S.page="home";
-var PKG={
- "tiet-kiem":{name:"Tiết kiệm",p:79000},
- "co-ban":{name:"Cơ bản",p:119000},
- "hoan-thien":{name:"Hoàn thiện",p:179000}
-};
-function el(html){document.getElementById("app").innerHTML=html}
+var MAIL="Huytu91@gmail.com";
+var PHONE="0944437238";
+var WEB="https://wotu.vn";
+var FB="https://www.facebook.com/wotuani";
+var ZALO="https://zalo.me/0944437238";
+var S={page:"welcome",c:null,dText:"Can ho 65m2 goi co ban",iText:"Lam bep 3m, tu do 1m9",dRes:null,iRes:null,last:null};
+
+function vnd(n){return Math.round(n).toLocaleString("vi-VN")+"d"}
+function money(s){s=Math.max(0,Math.round(s));var v=Math.round(s*0.08);return {sub:s,vat:v,total:s+v}}
+function loadC(){
+  try{var x=localStorage.getItem("wotu_c");S.c=x?JSON.parse(x):null;}catch(e){S.c=null;}
+  if(S.c&&S.c.fullName)S.page="home";
+}
+function saveC(){try{localStorage.setItem("wotu_c",JSON.stringify(S.c));}catch(e){}}
 function go(p){S.page=p;draw()}
-function top(){
- return '<p><a href="'+WEB+'">wotu.vn</a> · <a href="'+FB+'">Facebook</a> · <a href="'+ZALO+'">Zalo</a> · <a href="tel:'+PHONE+'">'+PHONE+'</a></p>';
+function goHome(){S.page=S.c?"home":"welcome";draw()}
+function links(){
+  return '<p class="muted noprint"><a href="'+WEB+'">wotu.vn</a> · <a href="'+FB+'">Facebook</a> · <a href="'+ZALO+'">Zalo</a> · <a href="tel:'+PHONE+'">'+PHONE+' Tu</a></p>';
 }
-function send(row){
- fetch("https://formsubmit.co/ajax/"+MAIL,{
- method:"POST",
- headers:{"Content-Type":"application/json","Accept":"application/json"},
- body:JSON.stringify({_subject:"Lead "+row.code,ten:row.c.fullName,sdt:row.c.phone,tong:VND(row.quote.total)})
- }).catch(function(){});
+function sendMail(code,type,total){
+  try{
+    fetch("https://formsubmit.co/ajax/"+MAIL,{
+      method:"POST",
+      headers:{"Content-Type":"application/json","Accept":"application/json"},
+      body:JSON.stringify({_subject:"Lead WOTU "+code,ten:S.c.fullName,sdt:S.c.phone,diachi:S.c.address,loai:type,tong:vnd(total)})
+    });
+  }catch(e){}
 }
-function save(q){
- if(!S.c){go("welcome");return}
- var n=(Number(localStorage.getItem("wotu_n")||0)+1);localStorage.setItem("wotu_n",n);
- var row={code:"WOTU-Q-"+String(n).padStart(6,"0"),c:S.c,quote:q,at:new Date().toISOString()};
- S.quotes.unshift(row);jset("wotu_q",S.quotes.slice(0,50));
- send(row);S.last=row;go("done");setTimeout(function(){window.print()},400);
+function saveQuote(type,total){
+  if(!S.c){go("welcome");return;}
+  var n=1;
+  try{n=Number(localStorage.getItem("wotu_n")||0)+1;localStorage.setItem("wotu_n",String(n));}catch(e){}
+  var code="WOTU-Q-"+( "000000"+n).slice(-6);
+  S.last={code:code,type:type,total:total};
+  sendMail(code,type,total);
+  S.page="done";
+  draw();
+  setTimeout(function(){window.print();},400);
 }
-window.submitC=function(){
- var name=document.getElementById("fn").value.trim();
- var phone=document.getElementById("ph").value.replace(/[\s.\-]/g,"");
- var address=document.getElementById("ad").value.trim();
- var ok=document.getElementById("ok").checked;
- var e="";
- if(!name)e+="Nhập họ tên. ";
- if(!/^(0|\+84)(3|5|7|8|9)\d{8}$/.test(phone))e+="SĐT không hợp lệ. ";
- if(!address)e+="Nhập địa chỉ. ";
- if(!ok)e+="Cần đồng ý dữ liệu. ";
- document.getElementById("er").textContent=e;
- if(e)return;
- S.c={fullName:name,phone:phone,address:address,consent:true};jset(" wotu_c",S.c);go("home");
-};
-window.doDesign=function(){
- var t=document.getElementById("dt").value.toLowerCase().replace(",",".");
- S.dText=document.getElementById("dt").value;
- var m=t.match(/(\d+(?:\.\d+)?)\s*m\s*2/)||t.match(/(\d+(?:\.\d+)?)\s*m²/);
- var area=m?Number(m[1]):0;
- var pkg="co-ban";
- if(t.indexOf("tiết kiệm")>=0||t.indexOf("tiet kiem")>=0)pkg="tiet-kiem";
- if(t.indexOf("hoàn thiện")>=0||t.indexOf("hoan thien")>=0)pkg="hoan-thien";
- if(area<30){S.dRes={err:area?"Dưới 30m², liên hệ Tú.":"Nhập diện tích, ví dụ 65m2"};draw();return}
- var g=PKG[pkg], mon=money(area*g.p);
- S.dRes={ok:1,name:g.name,area:area,mon:mon};draw();
-};
-window.doInterior=function(){
- var t=document.getElementById("it").value.toLowerCase();
- S.iText=document.getElementById("it").value;
- var bw=t.match(/bếp[^0-9]{0,10}(\d+[.,]?\d*)\s*m/);
- var w=bw?Number(bw[1].replace(",",".")):0;
- var lines=[],sub=0;
- if(w){
- lines.push(["Tủ bếp dưới — MDF Melamine, ngang "+w+"m",w*2100000]);
- lines.push(["Tủ bếp trên — MDF Melamine, ngang "+w+"m",w*2000000]);
- lines.push(["Mặt đá kim sa, dài "+w+"m",w*1350000]);
- lines.push(["Kính ốp 8li, dài "+w+"m",w*850000]);
- lines.push(["LED + cảm biến",w*250000+200000]);
- }
- var tu=t.match(/tủ[^0-9]{0,12}(\d+[.,]?\d*)\s*m/);
- if(tu){
- var tv=Number(tu[1].replace(",","."));
- lines.push(["Tủ áo ngủ master — MDF, theo kích thước "+tv+"m (hỏi cao nếu là ngang)",tv*1950000]);
- }
- if(!lines.length){S.iRes={err:"Chưa đọc được bếp / tủ. Thử: làm bếp 3m, tủ đồ 1m9"};draw();return}
- for(var i=0;i<lines.length;i++)sub+=lines[i][1];
- S.iRes={ok:1,lines:lines,mon:money(sub)};draw();
-};
+
+function submitC(){
+  var name=document.getElementById("fn").value.replace(/^\s+|\s+$/g,"");
+  var phone=document.getElementById("ph").value.replace(/[\s.\-]/g,"");
+  var address=document.getElementById("ad").value.replace(/^\s+|\s+$/g,"");
+  var ok=document.getElementById("ok").checked;
+  var e="";
+  if(!name)e+="Nhap ho ten. ";
+  if(!/^(0|\+84)(3|5|7|8|9)\d{8}$/.test(phone))e+="SDT khong hop le. ";
+  if(!address)e+="Nhap dia chi. ";
+  if(!ok)e+="Can dong y du lieu. ";
+  document.getElementById("er").innerHTML=e;
+  if(e)return;
+  S.c={fullName:name,phone:phone,address:address};
+  saveC();
+  go("home");
+}
+
+function doDesign(){
+  S.dText=document.getElementById("dt").value;
+  var t=S.dText.toLowerCase().replace(",", ".");
+  var m=t.match(/(\d+(?:\.\d+)?)\s*m\s*2/);
+  if(!m)m=t.match(/(\d+(?:\.\d+)?)\s*m²/);
+  var area=m?Number(m[1]):0;
+  var p=119000, name="Co ban";
+  if(t.indexOf("tiet kiem")>=0||t.indexOf("tiết kiệm")>=0){p=79000;name="Tiet kiem";}
+  if(t.indexOf("hoan thien")>=0||t.indexOf("hoàn thiện")>=0){p=179000;name="Hoan thien";}
+  if(!area){S.dRes={err:"Nhap dien tich, vi du 65m2"};draw();return;}
+  if(area<30){S.dRes={err:"Duoi 30m2 vui long goi "+PHONE};draw();return;}
+  S.dRes={ok:1,name:name,area:area,mon:money(area*p)};
+  draw();
+}
+
+function doInterior(){
+  S.iText=document.getElementById("it").value;
+  var t=S.iText.toLowerCase();
+  var lines=[], sub=0;
+  var bw=t.match(/b[eế]p[^0-9]{0,12}(\d+[.,]?\d*)\s*m/);
+  if(bw){
+    var w=Number(String(bw[1]).replace(",", "."));
+    lines.push(["Tu bep duoi — MDF Melamine ACCPANEL/KES/S6/Moc Phat/BMH, ngang "+w+"m, cao 850mm", w*2100000]);
+    lines.push(["Tu bep tren — cung vat lieu, ngang "+w+"m, cao 700mm", w*2000000]);
+    lines.push(["Mat da kim sa, dai "+w+"m", w*1350000]);
+    lines.push(["Op kinh son 8li, dai "+w+"m", w*850000]);
+    lines.push(["LED + cam bien", w*250000+200000]);
+  }
+  var tu=t.match(/t[uủ][^0-9]{0,14}(\d+[.,]?\d*)\s*m/);
+  if(tu){
+    var tv=Number(String(tu[1]).replace(",", "."));
+    lines.push(["Tu ao ngu master — MDF Melamine, kich thuoc yeu cau "+tv+"m", tv*1950000]);
+  }
+  if(!lines.length){S.iRes={err:"Thu: lam bep 3m, tu do 1m9"};draw();return;}
+  for(var i=0;i<lines.length;i++)sub+=lines[i][1];
+  S.iRes={ok:1,lines:lines,mon:money(sub)};
+  draw();
+}
+
+function quoteBox(mon){
+  return '<div class="tot">Chua VAT '+vnd(mon.sub)+'<br>VAT 8% '+vnd(mon.vat)+'<br><b>Tong '+vnd(mon.total)+'</b></div><p class="muted">VAT 8% theo NQ 204/2025 den 31/12/2026. Bao gia so bo. Vat lieu An Cuong / Minh Long: lien he WOTU.</p>';
+}
+
 function draw(){
- var h=top();
- if(S.page==="welcome"){
- h+="<h1>WOTU</h1><p>Báo giá thiết kế và nội thất.</p><div class='card'>";
- h+="<div>Họ tên *</div><input id='fn'>";
- h+="<div>SĐT *</div><input id='ph' inputmode='tel'>";
- h+="<div>Địa chỉ *</div><input id='ad'>";
- h+="<label><input type='checkbox' id='ok'> Đồng ý lưu thông tin tư vấn</label>";
- h+="<div class='err' id='er'></div><button class='btn' onclick='submitC()'>Tiếp tục</button></div>";
- }else if(S.page==="home"){
- h+="<p>Xin chào <b>"+(S.c&&S.c.fullName?S.c.fullName:"")+"</b></p>";
- h+="<div class='card'><b>Thiết kế</b><br><button class='btn' onclick='go(\"design\")'>Mở</button></div>";
- h+="<div class='card'><b>Nội thất</b><br><button class='btn' onclick='go(\"interior\")'>Mở</button></div>";
- }else if(S.page==="design"){
- h+="<h1>Thiết kế</h1><textarea id='dt'>"+S.dText+"</textarea><button class='btn' onclick='doDesign()'>Phân tích</button>";
- if(S.dRes&&S.dRes.err)h+="<div class='card err'>"+S.dRes.err+"</div>";
- if(S.dRes&&S.dRes.ok){
- h+="<div class='card'><b>"+S.dRes.name+" · "+S.dRes.area+" m²</b>";
- h+="<p>Chưa VAT "+VND(S.dRes.mon.sub)+"<br>VAT 8% "+VND(S.dRes.mon.vat)+"<br><b>Tổng "+VND(S.dRes. mon.total)+"</b></p>";
- h+="<button class='btn' onclick='save({type:\"Thiết kế\",total:"+S.dRes.mon.total+"})'>Tải PDF</button></div>";
- }
- h+="<button class='btn btn2' onclick='go(\"home\")'>Quay lại</button>";
- }else if(S.page==="interior"){
- h+="<h1>Nội thất</h1><textarea id='it'>"+S.iText+"</textarea><button class='btn' onclick='doInterior()'>Phân tích</button>";
- if(S.iRes&&S.iRes.err)h+="<div class='card err'>"+S.iRes.err+"</div>";
- if(S.iRes&&S.iRes.ok){
- h+="<div class='card'>";
- for(var i=0;i<S.iRes.lines.length;i++)h+="<div>"+S.iRes.lines[i][0]+" — <b>"+VND(S.iRes.lines[i][1])+"</b></div>";
- h+="<p>VAT 8% "+VND(S.iRes.mon.vat)+"<br><b>Tổng "+VND(S.iRes.mon.total)+"</b></p>";
- h+="<button class='btn' onclick='save({type:\"Nội thất\",total:"+S.iRes.mon.total+"})'>Tải PDF</button></div>";
- }
- h+="<button class='btn btn2' onclick='go(\"home\")'>Quay lại</button>";
- }else if(S.page==="done"){
- h+="<h1>"+(S.last&&S.last.code)+"</h1><p>Đã lưu. In → Save as PDF.</p><button class='btn btn2' onclick='go(\"home\")'>Về trang chủ</button>";
- }
- el(h);
+  var h= '<div class="row"><div class="logo"><div class="m">W</div><div><b>WOTU</b><div class="muted">Noi that cho to am Viet</div></div></div></div>'+links();
+  if(S.page==="welcome"){
+    h+="<h1>Bao gia thiet ke va noi that</h1>";
+    h+="<div class='card'>";
+    h+="<div>Ho va ten *</div><input id='fn'/>";
+    h+="<div>So dien thoai *</div><input id='ph'/>";
+    h+="<div>Dia chi *</div><input id='ad'/>";
+    h+="<p><label><input type='checkbox' id='ok'/> Dong y luu thong tin tu van</label></p>";
+    h+="<div class='err' id='er'></div>";
+    h+="<button class='btn' onclick='submitC()'>Tiep tuc</button></div>";
+  }else if(S.page==="home"){
+    h+="<p class='muted'>Xin chao <b>"+S.c.fullName+"</b></p>";
+    h+="<div class='card'><b>Thiet ke</b><p class='muted'>Nhap dien tich, chon goi.</p><button class='btn' onclick='go(\"design\")'>Mo thiet ke</button></div>";
+    h+="<div class='card'><b>Noi that</b><p class='muted'>Nhap bep, tu ao.</p><button class='btn' onclick='go(\"interior\")'>Mo noi that</button></div>";
+  }else if(S.page==="design"){
+    h+="<h1>Thiet ke</h1><p class='muted'>Vi du: can ho 65m2 goi co ban</p>";
+    h+="<textarea id='dt' rows='4'>"+S.dText+"</textarea>";
+    h+="<button class='btn noprint' onclick='doDesign()'>Phan tich</button>";
+    if(S.dRes&&S.dRes.err)h+="<div class='card err'>"+S.dRes.err+"</div>";
+    if(S.dRes&&S.dRes.ok){
+      h+="<div class='card'><b>Goi "+S.dRes.name+" — "+S.dRes.area+" m2</b>";
+      h+="<p class='muted'>Ho so theo goi. Khong hien don gia /m2.</p>"+quoteBox(S.dRes.mon);
+      h+="<button class='btn noprint' onclick='saveQuote(\"Thiet ke\","+S.dRes.mon.total+")'>Tai PDF</button></div>";
+    }
+    h+="<button class='btn btn2 noprint' onclick='goHome()'>Quay lai</button>";
+  }else if(S.page==="interior"){
+    h+="<h1>Noi that</h1><p class='muted'>Vi du: lam bep 3m, tu do 1m9</p>";
+    h+="<textarea id='it' rows='4'>"+S.iText+"</textarea>";
+    h+="<button class='btn noprint' onclick='doInterior()'>Phan tich</button>";
+    if(S.iRes&&S.iRes.err)h+="<div class='card err'>"+S.iRes.err+"</div>";
+    if(S.iRes&&S.iRes.ok){
+      h+="<div class='card'>";
+      for(var i=0;i<S.iRes.lines.length;i++){
+        h+="<div class='line'>"+S.iRes.lines[i][0]+"<br><b>"+vnd(S.iRes.lines[i][1])+"</b></div>";
+      }
+      h+=quoteBox(S.iRes.mon);
+      h+="<button class='btn noprint' onclick='saveQuote(\"Noi that\","+S.iRes.mon.total+")'>Tai PDF</button></div>";
+    }
+    h+="<button class='btn btn2 noprint' onclick='goHome()'>Quay lai</button>";
+  }else if(S.page==="done"){
+    h+="<h1>"+S.last.code+"</h1><p class='muted'>Da gui lead ve mail. Trong hop thoai in chon Save as PDF.</p>";
+    h+="<button class='btn btn2' onclick='goHome()'>Ve trang chu</button>";
+  }
+  document.getElementById("app").innerHTML=h;
 }
-document.getElementById("n1").onclick=function(){go(S.c?"home":"welcome")};
-document.getElementById("n2").onclick=function(){go("design")};
-document.getElementById("n3").onclick=function(){go("interior")};
-draw();
-}catch(err){
- document.getElementById("app").innerHTML="<h1>WOTU</h1><p class='err'>Lỗi JS:\n"+err.message+"</p>";
-}
-})();
+
+try{loadC();draw();}
+catch(e){document.getElementById("app").innerHTML="<h1>WOTU</h1><p class='err'>"+e.message+"</p>";}
 </script>
 </body>
 </html>
