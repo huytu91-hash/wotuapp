@@ -1,1 +1,69 @@
-PLACEHOLDER
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>WOTU</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{--paper:#F4F1EA;--ink:#1C1917;--slate:#2C4A5C;--line:#E6DFD4;--muted:#6D665E;--red:#8B1E1E;--card:#FFFcf7}
+*{box-sizing:border-box}
+body{margin:0;font-family:"Be Vietnam Pro",system-ui,sans-serif;background:#F4F1EA;color:#1C1917}
+.w{max-width:1180px;margin:0 auto;padding:18px 16px 72px}
+.top{display:flex;justify-content:space-between;align-items:flex-start;gap:16px;flex-wrap:wrap}
+.brand{display:flex;gap:12px;align-items:center}
+.brand img{height:48px;width:auto;display:block}
+.links a{margin-right:10px;color:#8B1E1E;text-decoration:none;font-size:12px}
+h1{font-size:clamp(26px,4vw,40px);letter-spacing:-.04em;margin:10px 0 6px}
+.lead,.muted,.note,.live{color:#6D665E;line-height:1.55}
+.lead{max-width:46ch;margin:0 0 16px}
+.note,.live{font-size:12px;margin-top:8px}
+.lay{display:grid;grid-template-columns:1fr;gap:16px;align-items:start}
+.card{background:#FFFcf7;border-radius:20px;padding:18px;margin:0 0 14px;border:1px solid #E6DFD4}
+.card h2{font-size:15px;margin:0 0 8px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pkg{border:1px solid #E6DFD4;border-radius:16px;padding:14px;margin:0 0 10px;cursor:pointer;background:#fff}
+.pkg.on{border-color:#1C1917;box-shadow:0 0 0 2px #1C1917}
+.row{display:flex;justify-content:space-between;gap:8px}
+label{display:block;margin:10px 0 0;font-size:12px;font-weight:600}
+input,select,textarea{width:100%;margin-top:6px;padding:11px 12px;border:1px solid #E6DFD4;border-radius:12px;font:inherit}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{display:flex;align-items:center;gap:8px;border:1px solid #E6DFD4;background:#fff;border-radius:999px;padding:8px 12px;font-size:13px;font-weight:600}
+.chip input{width:16px;height:16px;margin:0}
+.check{display:flex;align-items:flex-start;gap:10px;margin:12px 0;font-size:13px}
+.check input{width:18px;height:18px;margin:2px 0 0;flex:0 0 18px}
+.btn{width:100%;border:0;border-radius:999px;padding:13px 16px;margin-top:10px;background:#1C1917;color:#fff;font:inherit;font-weight:700;cursor:pointer}
+.btn2{background:#fff;color:#1C1917;border:1px solid #E6DFD4}
+.tot{background:#1C1917;color:#fff;border-radius:16px;padding:16px;margin-top:8px}
+.line{padding:11px 0;border-bottom:1px solid #efe8de;display:flex;align-items:flex-start;gap:10px}
+.no{flex:0 0 22px;font-size:11px;font-weight:800;color:#2C4A5C;padding-top:2px}
+.li{flex:1;min-width:0}
+.gia{white-space:nowrap;font-size:13px}
+.err{color:#8B1E1E;font-size:13px;min-height:1.2em}
+.hi{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.tiles{display:grid;grid-template-columns:1fr;gap:12px}
+.spec{margin:12px 0 0;padding:14px;background:#F7F4EF;border-radius:14px}
+.spec ul{margin:0;padding-left:18px}
+.spec li{margin:4px 0;font-size:12px;line-height:1.55}
+.qc{font-size:12px;color:#2C4A5C;background:#eef3f6;border-radius:10px;padding:8px 10px}
+.kh{font-size:12px;margin:8px 0 0;line-height:1.5}
+.printonly{display:none}
+@media(min-width:960px){.lay{grid-template-columns:minmax(0,1.05fr) minmax(320px,.9fr)}.side{position:sticky;top:16px}.tiles{grid-template-columns:1fr 1fr}}
+@media print{
+  .noprint{display:none!important}
+  .printonly{display:block!important}
+  body{background:#fff;color:#111}
+  .w{max-width:100%;padding:0}
+  .lay{display:block}
+  .card{border:0;box-shadow:none;padding:0;margin:0 0 12px;background:#fff}
+  .brand img{height:72px}
+  .tot{background:#111;color:#fff;-webkit-print-color-adjust:exact;print-color-adjust:exact}
+  h1{display:none}
+}
+</style>
+</head>
+<body>
+<div class="w" id="app">WOTU</div>
+<script src="app.js"></script>
+</body>
+</html>
