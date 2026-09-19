@@ -35,6 +35,9 @@ input[type=checkbox]{width:15px!important;height:15px!important;margin:0!importa
 .line{padding:12px 0;border-bottom:1px solid #efe8de;display:flex;gap:10px}
 .err{color:#8B1E1E;font-size:13px}
 .lay{display:grid;gap:16px}
+.spec{margin:12px 0 0;padding:14px;background:#F7F4EF;border-radius:12px}
+.spec ul{margin:6px 0 12px;padding-left:18px}
+.spec li{margin:4px 0;font-size:13px;line-height:1.55}
 .printonly{display:none}
 @media(min-width:960px){.lay{grid-template-columns:1.05fr .9fr}.side{position:sticky;top:16px}}
 @media print{.noprint{display:none!important}.printonly{display:block!important}.brand img{height:60px}h1{display:none}}
@@ -46,5 +49,9 @@ input[type=checkbox]{width:15px!important;height:15px!important;margin:0!importa
 <script src="logo.js"></script>
 <script>if(window.WOTU_LOGO){var el=document.getElementById("wlogo");if(el)el.src=window.WOTU_LOGO}</script>
 <script src="app.js"></script>
+<script>
+function terms(){return '<div class="spec"><b>Hình thức thanh toán</b><ul><li>Đợt 1 — 30% khi ký hợp đồng, chốt bản vẽ và vật liệu.</li><li>Đợt 2 — 50% khi xưởng gia công / trước ngày lắp đặt.</li><li>Đợt 3 — 20% còn lại khi nghiệm thu, bàn giao công trình.</li></ul><b>Cách thức làm việc</b><ul><li>Khảo sát hiện trạng tại công trình.</li><li>Chốt bản vẽ, vật liệu và báo giá chính thức.</li><li>Ký hợp đồng, đặt cọc, sản xuất tại xưởng WOTU.</li><li>Lắp đặt tại công trình, nghiệm thu và bàn giao.</li></ul><div class="muted">Phiếu này là ước lượng sơ bộ. Số liệu chốt theo hợp đồng sau khảo sát.</div></div>'}
+function tot(m){return '<div class="tot"><div class="row"><span>Chưa VAT</span><span>'+vnd(m.s)+'</span></div><div class="row"><span>VAT 8%</span><span>'+vnd(m.v)+'</span></div><div class="row"><b>Tổng</b><b>'+vnd(m.t)+'</b></div></div>'+specs()+terms()+notes()}
+</script>
 </body>
 </html>
