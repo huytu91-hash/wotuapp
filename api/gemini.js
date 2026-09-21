@@ -16,8 +16,12 @@ export default async function handler(req, res) {
     const available = (catalog.models || [])
       .filter((model) => (model.supportedGenerationMethods || []).includes("generateContent"))
       .map((model) => String(model.name || "").replace(/^models\//, ""));
-    const preferred = ["gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.0-flash", "gemini-1.5-flash"];
+    const preferred = ["gemini-3.6-flash", "gemini-3.5-flash", "gemini-2.5-flash", "gemini-2.5-flash-lite", "gemini-2.0-flash", "gemini-1.5-flash"];
     const models = preferred.filter((model) => available.includes(model));
+    if (!models.length) {
+      const fallback = available.find((model) => /flash/i.test(model));
+      if (fallback) models.push(fallback);
+    }
     if (!models.length) return res.status(502).json({ error: "API key không có model Gemini hỗ trợ generateContent." });
     for (const model of models) {
       const response = await fetch("https://generativelanguage.googleapis.com/v1beta/models/" + encodeURIComponent(model) + ":generateContent?key=" + encodeURIComponent(apiKey), {
