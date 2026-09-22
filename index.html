@@ -1,1 +1,50 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1"/>
+<title>WOTU</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700&display=swap" rel="stylesheet"/>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:"Be Vietnam Pro",system-ui,sans-serif;background:#F4F1EA;color:#1C1917;font-size:15px;line-height:1.55}
+.w{max-width:1120px;margin:0 auto;padding:20px 18px 80px}
+.top{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;margin-bottom:8px}
+.brand{display:flex;gap:14px;align-items:center}.brand img{height:52px;width:auto;display:block}
+.links a{margin-left:12px;color:#8B1E1E;text-decoration:none;font-size:13px}
+h1{font-size:28px;margin:14px 0 8px;font-weight:600}
+.lead,.muted,.note,.live{color:#6B645C}.lead{margin:0 0 18px}
+.card{background:#FFFcf7;border-radius:16px;padding:18px;margin:0 0 14px;border:1px solid #E6DFD4}
+.card h2{font-size:14px;margin:0 0 10px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.pkg{border:1px solid #E6DFD4;border-radius:14px;padding:14px;margin:0 0 10px;cursor:pointer;background:#fff}.pkg.on{border-color:#1C1917}
+.row{display:flex;justify-content:space-between;gap:8px}
+label{display:block;margin:10px 0 0;font-size:12px;font-weight:500}
+input,select,textarea{width:100%;margin-top:6px;padding:10px 12px;border:1px solid #E6DFD4;border-radius:10px;font:inherit;background:#fff}
+input[type=checkbox]{width:15px!important;height:15px!important;margin:0!important;padding:0!important;flex:0 0 15px}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.chip{display:flex;align-items:center;gap:8px;border:1px solid #E6DFD4;background:#fff;border-radius:999px;padding:7px 12px;font-size:13px}
+.check{display:flex;align-items:center;gap:8px;margin:12px 0;font-size:13px}
+.btn{width:100%;border:0;border-radius:999px;padding:12px 16px;margin-top:12px;background:#1C1917;color:#fff;font:inherit;font-weight:600;cursor:pointer}
+.btn2{background:#fff;color:#1C1917;border:1px solid #E6DFD4}
+.tot{background:#1C1917;color:#fff;border-radius:14px;padding:16px;margin-top:10px}
+.line{padding:12px 0;border-bottom:1px solid #efe8de;display:flex;gap:10px}
+.err{color:#8B1E1E;font-size:13px}.lay{display:grid;gap:16px}
+.spec{margin:12px 0 0;padding:14px;background:#F7F4EF;border-radius:12px}.spec ul{margin:6px 0 12px;padding-left:18px}.spec li{margin:4px 0;font-size:13px}
+.printonly{display:none}.admin-fab{position:fixed;right:14px;bottom:14px;z-index:20;padding:9px 12px;border-radius:999px;background:#fff;border:1px solid #E6DFD4;cursor:pointer}
+@media(min-width:960px){.lay{grid-template-columns:1.05fr .9fr}.side{position:sticky;top:16px}}
+@media print{.noprint{display:none!important}.printonly{display:block!important}h1{display:none}}
+</style>
+</head>
+<body>
+<img id="wlogo" alt="" hidden>
+<div class="w" id="app">WOTU</div>
+<script src="logo.js"></script>
+<script>if(window.WOTU_LOGO){var el=document.getElementById("wlogo");if(el)el.src=window.WOTU_LOGO}</script>
+<script src="app.js"></script>
 <script src="restore.js"></script>
+<script>
+function terms(){return '<div class="spec"><b>Hình thức thanh toán</b><ul><li>Đợt 1 — 30% khi ký hợp đồng, chốt bản vẽ và vật liệu.</li><li>Đợt 2 — 50% khi xưởng gia công / trước ngày lắp đặt.</li><li>Đợt 3 — 20% còn lại khi nghiệm thu, bàn giao công trình.</li></ul><b>Cách thức làm việc</b><ul><li>Khảo sát hiện trạng tại công trình.</li><li>Chốt bản vẽ, vật liệu và báo giá chính thức.</li><li>Ký hợp đồng, đặt cọc, sản xuất tại xưởng WOTU.</li><li>Lắp đặt tại công trình, nghiệm thu và bàn giao.</li></ul><div class="muted">Phiếu này là ước lượng sơ bộ. Số liệu chốt theo hợp đồng sau khảo sát.</div></div>'}
+function tot(m){return '<div class="tot"><div class="row"><span>Chưa VAT</span><span>'+vnd(m.s)+'</span></div><div class="row"><span>VAT 8%</span><span>'+vnd(m.v)+'</span></div><div class="row"><b>Tổng</b><b>'+vnd(m.t)+'</b></div></div>'+specs()+terms()+notes()}
+</script>
+</body>
+</html>
