@@ -26,7 +26,57 @@ module.exports = async (req,res) => {
         if (!id) return json(res,400,{error:'Thiếu mã đơn hàng.'});
         const rows=await sql`UPDATE public.wotu_orders SET details=jsonb_set(details,'{confirmedAt}',to_jsonb(now()),true)
           WHERE id=${id}::uuid AND NOT (details ? 'confirmedAt') RETURNING details`;
-        if (rows.length) return json(res,200,{confirmedAt:rows[0].details.confirmedAt});
+        if (rows.length) {
+          const details=rows[0].details||{};
+          const customer=details.customer||{};
+          let emailSent=false;
+          try {
+            await sql`CREATE TABLE IF NOT EXISTS public.wotu_customer_events (
+              id bigserial PRIMARY KEY,
+              event_key text UNIQUE NOT NULL,
+              event_type text NOT NULL CHECK (event_type IN ('visit','print','order')),
+              full_name text NOT NULL,
+              phone text NOT NULL,
+              address text NOT NULL,
+              metadata jsonb NOT NULL DEFAULT '{}'::jsonb,
+              created_at timestamptz NOT NULL DEFAULT now(),
+              email_sent boolean NOT NULL DEFAULT false
+            )`;
+            const event=await sql`INSERT INTO public.wotu_customer_events
+              (event_key,event_type,full_name,phone,address,metadata)
+              VALUES (${'order-'+id},'order',${String(customer.fullName||'Khách hàng')},${String(customer.phone||'')},
+                ${String(customer.address||'')},${JSON.stringify({reference:details.receipt?.reference||'',total:details.receipt?.total||0})}::jsonb)
+              ON CONFLICT (event_key) DO NOTHING RETURNING id`;
+            if(event.length && process.env.RESEND_API_KEY) {
+              const esc=value=>String(value??'').replace(/[&<>"]/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[ch]));
+              const mail=await fetch('https://api.resend.com/emails',{
+                method:'POST',
+                headers:{Authorization:'Bearer '+process.env.RESEND_API_KEY,'Content-Type':'application/json'},
+                body:JSON.stringify({
+                  from:'WOTU <onboarding@resend.dev>',
+                  to:['huytu91@gmail.com'],
+                  subject:'WOTU - Khách hàng vừa xác nhận đơn hàng',
+                  html:'<h2>Khách hàng vừa xác nhận đơn hàng</h2>'+
+                    '<p><b>Khách hàng:</b> '+esc(customer.fullName)+'</p>'+
+                    '<p><b>Số điện thoại:</b> '+esc(customer.phone)+'</p>'+
+                    '<p><b>Địa chỉ:</b> '+esc(customer.address)+'</p>'+
+                    '<p><b>Mã đơn:</b> '+esc(details.receipt?.reference||id)+'</p>'+
+                    '<p><b>Loại:</b> '+esc(details.receipt?.kind||'')+'</p>'+
+                    '<p><b>Tổng tiền:</b> '+esc(details.receipt?.total||0)+'đ</p>'
+                })
+              });
+              if(mail.ok) {
+                emailSent=true;
+                await sql`UPDATE public.wotu_customer_events SET email_sent=true WHERE id=${event[0].id}`;
+              } else {
+                console.error('WOTU order email failed:',mail.status,(await mail.text().catch(()=>'' )).slice(0,400));
+              }
+            }
+          } catch(mailError) {
+            console.error('WOTU order notification failed:',mailError.message);
+          }
+          return json(res,200,{confirmedAt:details.confirmedAt,emailSent});
+        }
       }
       if (id) {
         const rows=await sql`SELECT details FROM public.wotu_orders WHERE id=${id}::uuid`;
