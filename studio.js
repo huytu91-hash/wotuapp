@@ -47,7 +47,7 @@
   function scene(asset, thumbnail = false) {
     const file = asset + (thumbnail ? '-quote.jpg' : '.webp');
     const size = thumbnail ? 256 : 1024;
-    return '<img class="studio-product" src="assets/'+file+'" width="'+size+'" height="'+size+'" alt="">';
+    return '<img class="studio-product" src="'+file+'" width="'+size+'" height="'+size+'" alt="">';
   }
 
   function preview(key, data) {
@@ -91,7 +91,7 @@
       formCard.before(hero);
       intro.append(g('app').querySelector('.studio-kicker'),title,lead,formCard);
       hero.append(intro);
-      hero.insertAdjacentHTML('beforeend','<figure class="entry-cover"><img src="assets/studio-cover.webp" alt="Phối cảnh minh họa không gian bếp WOTU" fetchpriority="high">'+
+      hero.insertAdjacentHTML('beforeend','<figure class="entry-cover"><img src="studio-cover.webp" alt="Phối cảnh minh họa không gian bếp WOTU" fetchpriority="high">'+
         '<figcaption><span>WOTU DESIGN & BUILD</span><b>Nội thất thiết kế theo không gian</b></figcaption></figure>');
       hero.insertAdjacentHTML('afterend','<ol class="entry-steps"><li><span>01</span><b>Chọn khu vực</b><small>Bếp, phòng ngủ và các khu vực khác</small></li>'+
         '<li><span>02</span><b>Thử vật liệu</b><small>Xem phối cảnh và chọn phụ kiện</small></li>'+
@@ -216,7 +216,7 @@
       const materialAsset = ['ply_mel','mdf_acr','nhua_film','nhua_acr','nhua_lam'].includes(cabinetMaterial)
         ? 'material-'+cabinetMaterial : null;
       const illustration = meta?.asset || materialAsset || quoteImages.find(([pattern]) => pattern.test(title))?.[1];
-      if (product?.photo) row.insertAdjacentHTML('beforeend','<figure class="quote-product"><img src="assets/garis-'+
+      if (product?.photo) row.insertAdjacentHTML('beforeend','<figure class="quote-product"><img src="garis-'+
         product.photo+'.jpg" alt=""><figcaption>Ảnh GARIS</figcaption></figure>');
       if (illustration) row.insertAdjacentHTML('beforeend', '<figure class="quote-product">'+scene(illustration,true)+
         '<figcaption>Ảnh minh họa</figcaption></figure>');
