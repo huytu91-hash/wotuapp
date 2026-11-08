@@ -142,11 +142,15 @@ module.exports = async function handler(req, res) {
 
     let emailSent = false;
     if (eventType === 'print') {
-      emailSent = await sendPrintEmail({
-        fullName, phone, address, code: metadata.code, kind: metadata.kind, total: metadata.total
-      });
-      if (emailSent) {
-        await sql`UPDATE public.wotu_customer_events SET email_sent=true WHERE id=${inserted[0].id}`;
+      try {
+        emailSent = await sendPrintEmail({
+          fullName, phone, address, code: metadata.code, kind: metadata.kind, total: metadata.total
+        });
+        if (emailSent) {
+          await sql`UPDATE public.wotu_customer_events SET email_sent=true WHERE id=${inserted[0].id}`;
+        }
+      } catch (mailError) {
+        console.error('[wotu] print notification failed after event save:', mailError.message);
       }
     }
     return json(res, 201, { ok: true, emailSent });
