@@ -15,7 +15,7 @@
     section.className='material-studio noprint';
     section.innerHTML='<div class="material-intro"><div><span>WOTU MATERIAL STUDIO</span>'+
       '<h3>Thử phối vật liệu</h3></div><div class="material-targets" role="group" aria-label="Chọn hệ tủ"></div></div>'+
-      '<figure class="material-frame"><img src="assets/kitchen.webp" width="960" height="960" alt="Phối cảnh tủ bếp">'+
+      '<figure class="material-frame"><img src="kitchen.webp" width="960" height="960" alt="Phối cảnh tủ bếp">'+
       '<figcaption><span>Phối cảnh minh họa</span><strong></strong></figcaption></figure>'+
       '<div class="material-picks" role="group" aria-label="Chọn bộ vật liệu"></div>'+
       '<div class="material-spec" aria-live="polite"></div>'+
@@ -37,7 +37,7 @@
       button.type='button';button.dataset.materialId=material.id;
       if(Object.hasOwn(finishes,material.id)){
         const thumb=document.createElement('img');
-        thumb.src='assets/material-'+material.id+'-thumb.webp';
+        thumb.src='material-'+material.id+'-thumb.webp';
         thumb.width=192;thumb.height=192;thumb.alt='';
         button.append(thumb);
       }
@@ -51,7 +51,7 @@
       const select=g(active);
       const id=select.value;
       const [finish,asset]=Object.hasOwn(finishes,id)?finishes[id]:['Phối cảnh chung','kitchen.webp'];
-      const source='assets/'+asset;
+      const source=''+asset;
       const currentSpec=card.querySelector('[data-material-for="'+active+'"]');
       label.textContent=targets[active]+' · '+finish;
       if(requested!==source){
@@ -64,7 +64,7 @@
           image.alt='Phối cảnh minh họa '+finish.toLowerCase();
           if(!matchMedia('(prefers-reduced-motion: reduce)').matches)
             image.animate([{opacity:.65},{opacity:1}],{duration:260,easing:'ease-out'});
-        }).catch(()=>{ if(requested===source){image.src='assets/kitchen.webp';label.textContent=targets[active]+' · Phối cảnh chung';} });
+        }).catch(()=>{ if(requested===source){image.src='kitchen.webp';label.textContent=targets[active]+' · Phối cảnh chung';} });
       }
       for(const button of targetList.children)button.setAttribute('aria-pressed',String(button.dataset.materialTarget===active));
       for(const button of list.children)button.setAttribute('aria-pressed',String(button.dataset.materialId===id));
