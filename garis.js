@@ -95,7 +95,7 @@
     root.querySelector('[data-garis-filter="width"]').innerHTML=options(widths.map(w=>[w,w+' mm']),filters.width,'Mọi khổ tủ');
     root.querySelector('.garis-status').textContent = results.length+' mã phù hợp';
     root.querySelector('.garis-results').innerHTML = results.map(p=>'<article class="garis-product">'+
-      (p.photo?'<img loading="lazy" src="assets/garis-'+p.photo+'.jpg" alt="">':'<span class="garis-fallback" aria-hidden="true">GARIS</span>')+
+      (p.photo?'<img loading="lazy" src="garis-'+p.photo+'.jpg" alt="">':'<span class="garis-fallback" aria-hidden="true">GARIS</span>')+
       '<div><b>'+p.name+'</b><small>'+p.code+' · Khổ tủ '+p.width+' mm · Trang PDF '+p.page+'</small>'+
       '<button type="button" data-garis-code="'+p.code+'" aria-pressed="'+chosen.has(p.code)+'">'+
       (chosen.has(p.code)?'Bỏ chọn':'Thêm vào báo giá')+'</button></div></article>').join('') ||
