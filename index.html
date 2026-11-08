@@ -34,6 +34,7 @@ input[type=checkbox]{width:15px!important;height:15px!important;margin:0!importa
 @media(min-width:960px){.lay{grid-template-columns:1.05fr .9fr}.side{position:sticky;top:16px}}
 @media print{.noprint{display:none!important}.printonly{display:block!important}h1{display:none}}
 </style>
+<link rel="stylesheet" href="studio.css">
 </head>
 <body>
 <img id="wlogo" alt="" hidden>
@@ -43,8 +44,26 @@ input[type=checkbox]{width:15px!important;height:15px!important;margin:0!importa
 <script src="app.js"></script>
 <script src="restore.js"></script>
 <script>
-function terms(){return '<div class="spec"><b>Hình thức thanh toán</b><ul><li>Đợt 1 — 30% khi ký hợp đồng, chốt bản vẽ và vật liệu.</li><li>Đợt 2 — 50% khi xưởng gia công / trước ngày lắp đặt.</li><li>Đợt 3 — 20% còn lại khi nghiệm thu, bàn giao công trình.</li></ul><b>Cách thức làm việc</b><ul><li>Khảo sát hiện trạng tại công trình.</li><li>Chốt bản vẽ, vật liệu và báo giá chính thức.</li><li>Ký hợp đồng, đặt cọc, sản xuất tại xưởng WOTU.</li><li>Lắp đặt tại công trình, nghiệm thu và bàn giao.</li></ul><div class="muted">Phiếu này là ước lượng sơ bộ. Số liệu chốt theo hợp đồng sau khảo sát.</div></div>'}
-function tot(m){return '<div class="tot"><div class="row"><span>Chưa VAT</span><span>'+vnd(m.s)+'</span></div><div class="row"><span>VAT 8%</span><span>'+vnd(m.v)+'</span></div><div class="row"><b>Tổng</b><b>'+vnd(m.t)+'</b></div></div>'+specs()+terms()+notes()}
+function terms(total){
+  var installments=total<30000000
+    ? ['50% khi ký hợp đồng, chốt bản vẽ và vật liệu.','50% khi nghiệm thu, bàn giao công trình.']
+    : ['40% khi ký hợp đồng, chốt bản vẽ và vật liệu.','30% khi xưởng gia công hoặc trước ngày lắp đặt.','30% khi nghiệm thu, bàn giao công trình.'];
+  var schedule=installments.map(function(text,index){return '<li>Đợt '+(index+1)+' — '+text+'</li>'}).join('');
+  return '<div class="spec"><b>Hình thức thanh toán</b><ul class="payment-schedule">'+schedule+
+    '</ul><b>Cách thức làm việc</b><ul><li>Khảo sát hiện trạng tại công trình.</li><li>Chốt bản vẽ, vật liệu và báo giá chính thức.</li><li>Ký hợp đồng, đặt cọc, sản xuất tại xưởng WOTU.</li><li>Lắp đặt tại công trình, nghiệm thu và bàn giao.</li></ul><div class="muted">Phiếu này là ước lượng sơ bộ. Số liệu chốt theo hợp đồng sau khảo sát.</div></div>';
+}
+function tot(m){return '<div class="tot">'+(m.voucher?'<div class="row"><span>Tạm tính trước ưu đãi</span><span>'+vnd(m.original)+'</span></div><div class="row voucher-discount"><span>Voucher '+m.voucher.code+'</span><span>−'+vnd(m.discount)+'</span></div>':'')+'<div class="row"><span>Chưa VAT</span><span>'+vnd(m.s)+'</span></div><div class="row"><span>VAT 8%</span><span>'+vnd(m.v)+'</span></div><div class="row"><b>Tổng</b><b>'+vnd(m.t)+'</b></div></div>'+voucherFields(m)+specs()+terms(m.t)+notes()}
 </script>
+<script src="prices.js"></script>
+<script src="garis.js"></script>
+<script src="vouchers.js"></script>
+<script src="assets/qrcode-generator.js"></script>
+<script src="payment-qr.js"></script>
+<script src="orders.js"></script>
+<script src="extras.js"></script>
+<script src="material-studio.js"></script>
+<script src="material-details.js"></script>
+<script src="studio.js"></script>
 </body>
 </html>
+

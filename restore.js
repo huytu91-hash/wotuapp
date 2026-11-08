@@ -13,13 +13,13 @@ function tdP(mat){return mat==="ply_mel"?2000000:mat==="nhua_film"?2200000:18000
     function has(name){return L.some(function(x){return x[0].indexOf(name)===0})}
     if(S.rooms.khach&&S.kh.opm&&!has("Ốp vách trang trí"))L.push(["Ốp vách trang trí phòng khách","Vách "+vachTen(S.kh.op||"mdf_mel")+".",S.kh.opm*vachP(S.kh.op||"mdf_mel")]);
     if(S.rooms.an){
-      if(S.an.trang&&!has("Tủ trang trí"))L.push(["Tủ trang trí phòng ăn","Thùng + cánh "+vachTen(S.an.bmat||"mdf_mel")+". Sâu 350 mm.",S.an.trang*keP(S.an.bmat||"mdf_mel")]);
-      if(S.an.ban&&banP(S.an.ban,S.an.bmat||"mdf_mel")&&!has("Bàn ăn")){
+      if(S.an.trang&&!has("Tủ trang trí"))L.push(["Tủ trang trí phòng ăn","Thùng + cánh "+vachTen(S.an.bmat||"mdf_mel")+". Sâu 350 mm.",S.an.trang*wotuDisplayRate(S.an.bmat||"mdf_mel")]);
+      if(S.an.ban&&banP(S.an.ban,S.an.banMat||S.an.bmat||"mdf_mel")&&!has("Bàn ăn")){
         var bs=S.an.ban==="14"?"1m4":S.an.ban==="16"?"1m6":"1m8";
-        L.push(["Bàn ăn",bedTen(S.an.bmat||"mdf_mel")+". Dài "+bs+".",banP(S.an.ban,S.an.bmat||"mdf_mel")]);
+        L.push(["Bàn ăn",bedTen(S.an.banMat||S.an.bmat||"mdf_mel")+". Dài "+bs+".",banP(S.an.ban,S.an.banMat||S.an.bmat||"mdf_mel")]);
       }
     }
-    if(S.rooms.tho&&S.tho.m2&&!has("Ốp vách phòng thờ"))L.push(["Ốp vách phòng thờ","Vách "+vachTen(S.tho.vach||"mdf_mel")+".",S.tho.m2*vachP(S.tho.vach||"mdf_mel")]);
+    if(S.rooms.tho&&S.tho.m2&&!has("Ốp vách phòng thờ"))L.push(["Ốp vách phòng thờ","Vách "+vachTen(S.tho.vach||"mdf_mel")+".",S.tho.m2*wotuAltarRate(S.tho.vach||"mdf_mel")]);
     ["master","n2","n3"].forEach(function(id){
       if(!S.rooms[id])return;
       var n=S.ngu[id],ten=id==="master"?"master":id==="n2"?"2":"3";
@@ -34,6 +34,7 @@ function tdP(mat){return mat==="ply_mel"?2000000:mat==="nhua_film"?2200000:18000
     _grab();
     if(g("anban"))S.an.ban=g("anban").value||"";
     if(g("anbmat"))S.an.bmat=g("anbmat").value||"mdf_mel";
+    if(g("anbanmat"))S.an.banMat=g("anbanmat").value||"mdf_mel";
     if(g("antrang"))S.an.trang=+g("antrang").value||0;
     if(g("khopm"))S.kh.opm=+g("khopm").value||0;
     if(g("khop"))S.kh.op=g("khop").value||"mdf_mel";
@@ -56,7 +57,7 @@ function tdP(mat){return mat==="ply_mel"?2000000:mat==="nhua_film"?2200000:18000
     }
     var an=[].slice.call(document.querySelectorAll(".card h2")).find(function(h){return h.textContent==="Phòng ăn"});
     if(an&&S.rooms.an&&!g("anban")){
-      an.parentNode.insertAdjacentHTML("beforeend",'<div class="grid"><label>Tủ trang trí (m²)<input id="antrang" type="number" step="0.1" value="'+(S.an.trang||0)+'"></label><label>Bàn ăn'+opt("anban",S.an.ban||"",[["","Không"],["14","1m4"],["16","1m6"],["18","1m8"]])+'</label></div><label>Vật liệu bàn / tủ trang trí'+opt("anbmat",S.an.bmat||"mdf_mel",mats)+'</label>');
+      an.parentNode.insertAdjacentHTML("beforeend",'<div class="grid"><label>Tủ trang trí (m²)<input id="antrang" type="number" step="0.1" value="'+(S.an.trang||0)+'"></label><label>Bàn ăn'+opt("anban",S.an.ban||"",[["","Không"],["14","1m4"],["16","1m6"],["18","1m8"]])+'</label></div><div class="grid"><label>Vật liệu tủ trang trí'+opt("anbmat",S.an.bmat||"mdf_mel",mats)+'</label><label>Vật liệu bàn ăn'+opt("anbanmat",S.an.banMat||(S.an.bmat==="ply_mel"?"ply_mel":"mdf_mel"),mats.slice(0,2))+'</label></div>');
     }
     if(S.rooms.tho&&!g("thom2")){
       var chips=document.querySelector(".chips");
