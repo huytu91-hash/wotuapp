@@ -66,12 +66,12 @@
   giayP = rates('Phòng khách','living.shoe','Tủ giày','đ/m²',giayP,()=>limited().flatMap(([[id],label])=>[
     [[id,0],label],[[id,1],label+' · Cánh Acrylic'],
   ]));
-  const baseWall = (...args) => keP(...args);
+  const baseWall = () => 0;
   vachP = rates('Phòng khách','living.wall','Ốp vách trang trí','đ/m²',baseWall,limited);
   window.wotuAltarRate = rates('Phòng thờ','altar.wall','Ốp vách phòng thờ','đ/m²',baseWall,limited);
 
   ruouP = rates('Phòng ăn','dining.wine','Tủ rượu','đ/m²',ruouP,()=>options(Object.entries(labels)));
-  banP = rates('Phòng ăn','dining.table','Bàn ăn','đ/cái',banP,()=>sizeWithMaterial(['14','16','18']));
+  banP = rates('Phòng ăn','dining.table','Bàn ăn','đ/cái',typeof banP === 'function' ? banP : (()=>0),()=>sizeWithMaterial(['14','16','18']));
   window.wotuDisplayRate = rates('Phòng ăn','dining.display','Tủ trang trí','đ/m²',(...args)=>keP(...args),limited);
 
   tuP = rates('Phòng ngủ','bedroom.wardrobe','Tủ áo','đ/m²',tuP,mats);
@@ -84,9 +84,9 @@
   nemP = rates('Phòng ngủ','bedroom.pad','Mút ốp đầu giường','đ/cái',nemP,()=>options([
     ['14','1,4 m'],['16','1,6 m'],['18','1,8 m'],['20','2 m'],
   ]));
-  tabP = fixed('Phòng ngủ','bedroom.nightstand','Tab đầu giường','đ/cái',tabP());
-  hocP = fixed('Phòng ngủ','bedroom.drawer','Hộc kéo giường','đ/hộc',hocP());
-  tdP = rates('Phòng ngủ','bedroom.vanity','Bàn trang điểm','đ/m dài',tdP,limited);
+  tabP = fixed('Phòng ngủ','bedroom.nightstand','Tab đầu giường','đ/cái',typeof tabP === 'function' ? tabP() : 0);
+  hocP = fixed('Phòng ngủ','bedroom.drawer','Hộc kéo giường','đ/hộc',typeof hocP === 'function' ? hocP() : 0);
+  tdP = rates('Phòng ngủ','bedroom.vanity','Bàn trang điểm','đ/m dài',typeof tdP === 'function' ? tdP : (()=>0),limited);
   window.wotuGarisRate = (code,base) => value('garis.'+code,base);
   window.registerWotuGarisRate = (code,name,base) => add('Phụ kiện GARIS','garis.'+code,code+' · '+name,'đ/bộ',()=>base);
 
