@@ -18,7 +18,7 @@ Danh mục mã hợp lệ:
 - Đá bếp: kimsa | su | lamar | khong
 - Ốp kính/đá tường: k6 | kimsa | khong
 - Kịch trần: full | khung | (chuỗi rỗng nếu không)
-- Bồn rửa: "700" | "800" | "" 
+- Bồn rửa: "700" | "800" | ""
 - Giường size: "14" | "16" | "18" | "20" | ""
 - Phòng: bep, khach, an, master, n2, n3, tho
 
@@ -60,77 +60,107 @@ Schema JSON bắt buộc (không markdown, không giải thích ngoài JSON):
 
 Chỉ điền field liên quan nhu cầu. rooms phải có ít nhất 1 phần tử nếu suy ra được. Số đo là number (mét hoặc m²).`;
 
-    const body = {
+    const bodyBase = {
       contents: [{ role: "user", parts: [{ text: "Nhu cầu khách:\n" + text }] }],
       systemInstruction: { parts: [{ text: system }] },
       generationConfig: {
         temperature: 0.25,
-        maxOutputTokens: 1024,
-        responseMimeType: "application/json"
+        maxOutputTokens: 1024
       }
     };
 
+    async function listModels() {
+      try {
+        const r = await fetch(
+          "https://generativelanguage.googleapis.com/v1beta/models?key=" + encodeURIComponent(apiKey)
+        );
+        const data = await r.json().catch(() => ({}));
+        if (!r.ok) return [];
+        return (data.models || [])
+          .filter((m) => (m.supportedGenerationMethods || []).includes("generateContent"))
+          .map((m) => String(m.name || "").replace(/^models\//, ""));
+      } catch (_) {
+        return [];
+      }
+    }
+
     const preferred = [
+      "gemini-2.0-flash",
+      "gemini-2.0-flash-001",
       "gemini-2.5-flash",
       "gemini-2.5-flash-lite",
-      "gemini-2.0-flash",
+      "gemini-flash-latest",
       "gemini-1.5-flash",
-      "gemini-1.5-flash-latest"
+      "gemini-1.5-flash-001",
+      "gemini-pro"
     ];
 
+    let models = preferred.slice();
+    const available = await listModels();
+    if (available.length) {
+      models = preferred.filter((m) => available.includes(m));
+      if (!models.length) models = available.filter((m) => /flash/i.test(m));
+      if (!models.length) models = available.slice(0, 5);
+    }
+
     let lastError = "";
-    for (const model of preferred) {
-      const response = await fetch(
-        "https://generativelanguage.googleapis.com/v1beta/models/" +
-          encodeURIComponent(model) +
-          ":generateContent?key=" +
-          encodeURIComponent(apiKey),
-        {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify(body)
+    for (const model of models) {
+      for (const withJson of [true, false]) {
+        const body = JSON.parse(JSON.stringify(bodyBase));
+        if (withJson) body.generationConfig.responseMimeType = "application/json";
+        const response = await fetch(
+          "https://generativelanguage.googleapis.com/v1beta/models/" +
+            encodeURIComponent(model) +
+            ":generateContent?key=" +
+            encodeURIComponent(apiKey),
+          {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            body: JSON.stringify(body)
+          }
+        );
+        const data = await response.json().catch(() => ({}));
+        if (response.status === 401 || response.status === 403) {
+          return res.status(502).json({
+            error:
+              "Gemini từ chối API key. Hãy kiểm tra key đúng project và đã bật Generative Language API."
+          });
         }
-      );
-      const data = await response.json().catch(() => ({}));
-      if (response.status === 401 || response.status === 403) {
-        return res.status(502).json({
-          error: "Gemini từ chối API key. Hãy kiểm tra key đúng project và đã bật Generative Language API."
+        const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (!response.ok || !rawText) {
+          lastError = data.error?.message || "HTTP " + response.status;
+          continue;
+        }
+
+        let plan = null;
+        try {
+          const cleaned = String(rawText)
+            .replace(/^```json\s*/i, "")
+            .replace(/^```\s*/i, "")
+            .replace(/\s*```$/i, "")
+            .trim();
+          plan = JSON.parse(cleaned);
+        } catch (_) {
+          plan = null;
+        }
+
+        const advice = Array.isArray(plan?.advice)
+          ? plan.advice.filter((x) => typeof x === "string" && x.trim()).slice(0, 5)
+          : [];
+        const summary =
+          typeof plan?.summary === "string" && plan.summary.trim()
+            ? plan.summary.trim()
+            : advice[0] || String(rawText).slice(0, 400);
+
+        return res.status(200).json({
+          model,
+          plan: plan && typeof plan === "object" ? plan : null,
+          text: advice.length
+            ? advice.map((line) => "• " + line.replace(/^[-•\s]+/, "")).join("\n")
+            : summary,
+          summary
         });
       }
-      const rawText = data.candidates?.[0]?.content?.parts?.[0]?.text;
-      if (!response.ok || !rawText) {
-        lastError = data.error?.message || ("HTTP " + response.status);
-        continue;
-      }
-
-      let plan = null;
-      try {
-        const cleaned = String(rawText)
-          .replace(/^```json\s*/i, "")
-          .replace(/^```\s*/i, "")
-          .replace(/\s*```$/i, "")
-          .trim();
-        plan = JSON.parse(cleaned);
-      } catch (_) {
-        plan = null;
-      }
-
-      const advice = Array.isArray(plan?.advice)
-        ? plan.advice.filter((x) => typeof x === "string" && x.trim()).slice(0, 5)
-        : [];
-      const summary =
-        typeof plan?.summary === "string" && plan.summary.trim()
-          ? plan.summary.trim()
-          : advice[0] || "Đã phân tích nhu cầu.";
-
-      return res.status(200).json({
-        model,
-        plan: plan && typeof plan === "object" ? plan : null,
-        text: advice.length
-          ? advice.map((line) => "• " + line.replace(/^[-•\s]+/, "")).join("\n")
-          : summary,
-        summary
-      });
     }
 
     return res.status(502).json({
