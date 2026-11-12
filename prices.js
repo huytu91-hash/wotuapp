@@ -66,7 +66,7 @@
   giayP = rates('Phòng khách','living.shoe','Tủ giày','đ/m²',giayP,()=>limited().flatMap(([[id],label])=>[
     [[id,0],label],[[id,1],label+' · Cánh Acrylic'],
   ]));
-  const baseWall = vachP;
+  const baseWall = (...args) => keP(...args);
   vachP = rates('Phòng khách','living.wall','Ốp vách trang trí','đ/m²',baseWall,limited);
   window.wotuAltarRate = rates('Phòng thờ','altar.wall','Ốp vách phòng thờ','đ/m²',baseWall,limited);
 
